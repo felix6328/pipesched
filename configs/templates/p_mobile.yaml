@@ -1,0 +1,51 @@
+# P-Mobile：模拟风格化手游短管线。全部为合成数据，不是真实项目组。
+id: p_mobile
+name: "P-Mobile｜风格化手游（模拟）"
+kitsu_project_name: "P-Mobile｜风格化手游（模拟）"
+description: >
+  偏 2D / 低模的短管线：原画 → 制作 → 入库检查。周期短、缓冲小、
+  外包评审 SLA 紧（1 天）。同一套 Agent 只换这份 YAML，不改代码。
+pipeline: short
+production_style: video-game
+hours_per_day: 8.0
+team_weekly_hours: 40.0
+workweek: [0, 1, 2, 3, 4]   # 周一到周五
+holidays: []
+synthetic: true
+
+asset_types:
+  - {id: prop, kitsu_name: Prop, label: 道具}
+  - {id: ui, kitsu_name: UI, label: 界面}
+  - {id: character, kitsu_name: Character, label: 角色}
+
+task_types:
+  - id: concept
+    name: 原画
+    color: "#8D6E63"
+    default_days: 1.0
+    depends_on: []
+  - id: production
+    name: 制作
+    color: "#3F51B5"
+    default_days: 2.0
+    depends_on: [concept]
+  - id: ingest_qa
+    name: 入库检查
+    color: "#FF9800"
+    default_days: 0.5
+    depends_on: [production]
+
+risk:
+  overdue_grace_days: 0
+  overrun_ratio: 1.2
+  retake_threshold: 2
+  review_sla_days: 1
+  early_warning_days: 7
+
+writeback:
+  allow_dates: true
+  allow_assign: false
+
+estimate:
+  min_similar: 3
+  schedule_stat: p75

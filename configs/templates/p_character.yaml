@@ -1,0 +1,65 @@
+# P-Character：模拟角色全流程。全部为合成数据，不是真实项目组。
+id: p_character
+name: "P-Character｜角色全流程（模拟）"
+kitsu_project_name: "P-Character｜角色全流程（模拟）"
+description: >
+  角色全流程：原画 → 建模 → 贴图 → 绑定 → 动画 → 特效（依赖写死在本模板）。
+  估时按人天，返修阈值更严，风格评审 SLA 更长。换模板不改 Agent 代码。
+pipeline: full
+production_style: video-game
+hours_per_day: 8.0
+team_weekly_hours: 80.0
+workweek: [0, 1, 2, 3, 4]
+holidays: []
+synthetic: true
+
+asset_types:
+  - {id: character, kitsu_name: Character, label: 角色}
+  - {id: prop, kitsu_name: Prop, label: 道具}
+
+task_types:
+  - id: concept
+    name: 原画
+    color: "#8D6E63"
+    default_days: 3.0
+    depends_on: []
+  - id: modeling
+    name: 建模
+    color: "#78909C"
+    default_days: 4.0
+    depends_on: [concept]
+  - id: surfacing
+    name: 贴图
+    color: "#64B5F6"
+    default_days: 3.5
+    depends_on: [modeling]
+  - id: rigging
+    name: 绑定
+    color: "#9CCC65"
+    default_days: 4.0
+    depends_on: [surfacing]
+  - id: animation
+    name: 动画
+    color: "#009688"
+    default_days: 6.0
+    depends_on: [rigging]
+  - id: vfx
+    name: 特效
+    color: "#26C6DA"
+    default_days: 3.0
+    depends_on: [animation]
+
+risk:
+  overdue_grace_days: 1
+  overrun_ratio: 1.15
+  retake_threshold: 1
+  review_sla_days: 3
+  early_warning_days: 7
+
+writeback:
+  allow_dates: true
+  allow_assign: false
+
+estimate:
+  min_similar: 3
+  schedule_stat: p75

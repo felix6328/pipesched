@@ -1,0 +1,1728 @@
+{
+  "estimate": {
+    "n_completed_historical": 258,
+    "n_train": 180,
+    "n_test": 78,
+    "cutoff_done_date": "2026-09-28",
+    "split": "按完成日排序后前 70% 训练、后 30% 测试；检索池只有训练集，并排除自身。",
+    "overall_median": {
+      "n": 78,
+      "n_pairs": 78,
+      "mape": 0.3527471363503561,
+      "median_abs_err_days": 0.41234375,
+      "coverage": 1.0,
+      "fallback_to_template": 0
+    },
+    "overall_p75": {
+      "n": 78,
+      "n_pairs": 78,
+      "mape": 0.5545877127767552,
+      "median_abs_err_days": 0.6673350694444442,
+      "coverage": 1.0,
+      "fallback_to_template": 0
+    },
+    "overall_template": {
+      "n": 78,
+      "n_pairs": 78,
+      "mape": 0.4720838484590401,
+      "median_abs_err_days": 0.5096527777777777,
+      "coverage": 1.0,
+      "fallback_to_template": 0
+    },
+    "ablation_task_type_only_median": {
+      "n": 78,
+      "n_pairs": 78,
+      "mape": 0.4597407746002037,
+      "median_abs_err_days": 0.7303038194444446,
+      "coverage": 1.0,
+      "fallback_to_template": 0
+    },
+    "by_project": {
+      "P-Character｜角色全流程（模拟）": {
+        "median": {
+          "n": 40,
+          "n_pairs": 40,
+          "mape": 0.22921908103946792,
+          "median_abs_err_days": 0.44187499999999913,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 40,
+          "n_pairs": 40,
+          "mape": 0.5257272921152116,
+          "median_abs_err_days": 0.9211458333333336,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        }
+      },
+      "P-Mobile｜风格化手游（模拟）": {
+        "median": {
+          "n": 38,
+          "n_pairs": 38,
+          "mape": 0.4827766682565542,
+          "median_abs_err_days": 0.2761892361111109,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 38,
+          "n_pairs": 38,
+          "mape": 0.4156170656630702,
+          "median_abs_err_days": 0.33015625000000004,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        }
+      }
+    },
+    "by_cell": {
+      "Character|入库检查": {
+        "median": {
+          "n": 4,
+          "n_pairs": 4,
+          "mape": 0.19940106497182553,
+          "median_abs_err_days": 0.061857638888888844,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 4,
+          "n_pairs": 4,
+          "mape": 0.21533442954059503,
+          "median_abs_err_days": 0.08984375,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 4
+      },
+      "Character|制作": {
+        "median": {
+          "n": 6,
+          "n_pairs": 6,
+          "mape": 0.35168391871680527,
+          "median_abs_err_days": 0.789704861111111,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 6,
+          "n_pairs": 6,
+          "mape": 0.3400510073237138,
+          "median_abs_err_days": 0.9575520833333335,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 6
+      },
+      "Character|动画": {
+        "median": {
+          "n": 4,
+          "n_pairs": 4,
+          "mape": 0.08783938011853705,
+          "median_abs_err_days": 0.5167361111111104,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 4,
+          "n_pairs": 4,
+          "mape": 0.0861822618609037,
+          "median_abs_err_days": 0.49977430555555546,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 4
+      },
+      "Character|原画": {
+        "median": {
+          "n": 13,
+          "n_pairs": 13,
+          "mape": 0.6097226509757295,
+          "median_abs_err_days": 0.9308680555555557,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 13,
+          "n_pairs": 13,
+          "mape": 0.23184354769517718,
+          "median_abs_err_days": 0.39364583333333325,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 13
+      },
+      "Character|建模": {
+        "median": {
+          "n": 7,
+          "n_pairs": 7,
+          "mape": 0.43418452399170565,
+          "median_abs_err_days": 2.009930555555556,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 7,
+          "n_pairs": 7,
+          "mape": 0.34148239472261654,
+          "median_abs_err_days": 2.0684375,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 7
+      },
+      "Character|特效": {
+        "median": {
+          "n": 2,
+          "n_pairs": 2,
+          "mape": 0.13906735115821434,
+          "median_abs_err_days": 0.3552777777777778,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 2,
+          "n_pairs": 2,
+          "mape": 0.2431303868594371,
+          "median_abs_err_days": 0.5355208333333334,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 2
+      },
+      "Character|绑定": {
+        "median": {
+          "n": 4,
+          "n_pairs": 4,
+          "mape": 0.24241778871070152,
+          "median_abs_err_days": 0.630208333333333,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 4,
+          "n_pairs": 4,
+          "mape": 0.21009309251307853,
+          "median_abs_err_days": 0.8389930555555554,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 4
+      },
+      "Character|贴图": {
+        "median": {
+          "n": 8,
+          "n_pairs": 8,
+          "mape": 0.14633839218563474,
+          "median_abs_err_days": 0.3603298611111112,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 8,
+          "n_pairs": 8,
+          "mape": 0.1551055531855501,
+          "median_abs_err_days": 0.5416145833333332,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 8
+      },
+      "Prop|入库检查": {
+        "median": {
+          "n": 3,
+          "n_pairs": 3,
+          "mape": 0.24592410136188522,
+          "median_abs_err_days": 0.13020833333333337,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 3,
+          "n_pairs": 3,
+          "mape": 0.2197232946855466,
+          "median_abs_err_days": 0.0338194444444444,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 3
+      },
+      "Prop|制作": {
+        "median": {
+          "n": 3,
+          "n_pairs": 3,
+          "mape": 0.16405025177583832,
+          "median_abs_err_days": 0.222951388888889,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 3,
+          "n_pairs": 3,
+          "mape": 0.31864799304360697,
+          "median_abs_err_days": 0.45743055555555556,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 3
+      },
+      "Prop|动画": {
+        "median": {
+          "n": 1,
+          "n_pairs": 1,
+          "mape": 0.037169099284089104,
+          "median_abs_err_days": 0.09302083333333355,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 1,
+          "n_pairs": 1,
+          "mape": 1.3974693379210834,
+          "median_abs_err_days": 3.497361111111111,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 1
+      },
+      "Prop|原画": {
+        "median": {
+          "n": 7,
+          "n_pairs": 7,
+          "mape": 0.7053502992800478,
+          "median_abs_err_days": 0.5919097222222223,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 7,
+          "n_pairs": 7,
+          "mape": 0.9584074267523454,
+          "median_abs_err_days": 0.5,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 7
+      },
+      "Prop|建模": {
+        "median": {
+          "n": 2,
+          "n_pairs": 2,
+          "mape": 0.3181832674523298,
+          "median_abs_err_days": 0.7410763888888889,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 2,
+          "n_pairs": 2,
+          "mape": 1.1864430047876688,
+          "median_abs_err_days": 1.9080208333333333,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 2
+      },
+      "Prop|特效": {
+        "median": {
+          "n": 2,
+          "n_pairs": 2,
+          "mape": 0.4138861582230629,
+          "median_abs_err_days": 0.4830381944444445,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 2,
+          "n_pairs": 2,
+          "mape": 1.5569006534692293,
+          "median_abs_err_days": 1.8241319444444444,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 2
+      },
+      "Prop|绑定": {
+        "median": {
+          "n": 2,
+          "n_pairs": 2,
+          "mape": 0.1510843983474643,
+          "median_abs_err_days": 0.17612847222222217,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 2,
+          "n_pairs": 2,
+          "mape": 2.472651574325661,
+          "median_abs_err_days": 2.8460416666666664,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 2
+      },
+      "UI|入库检查": {
+        "median": {
+          "n": 4,
+          "n_pairs": 4,
+          "mape": 0.2203867419146392,
+          "median_abs_err_days": 0.04923611111111112,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 4,
+          "n_pairs": 4,
+          "mape": 0.5383358270295027,
+          "median_abs_err_days": 0.16565972222222222,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 4
+      },
+      "UI|制作": {
+        "median": {
+          "n": 3,
+          "n_pairs": 3,
+          "mape": 0.2588754453040823,
+          "median_abs_err_days": 0.25249999999999995,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 3,
+          "n_pairs": 3,
+          "mape": 0.866947057721622,
+          "median_abs_err_days": 0.7106250000000001,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 3
+      },
+      "UI|原画": {
+        "median": {
+          "n": 3,
+          "n_pairs": 3,
+          "mape": 0.41399567070688253,
+          "median_abs_err_days": 0.43909722222222225,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "template": {
+          "n": 3,
+          "n_pairs": 3,
+          "mape": 0.2322455943608952,
+          "median_abs_err_days": 0.20805555555555555,
+          "coverage": 1.0,
+          "fallback_to_template": 0
+        },
+        "n": 3
+      }
+    }
+  },
+  "estimate_records_sample": [
+    {
+      "id": "e92b45ca-dd71-475c-b6dc-de09a3c11558",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_character_hero_zhao",
+      "asset_type": "Character",
+      "task_type": "贴图",
+      "task_type_key": "surfacing",
+      "actual": 4.063923611111111,
+      "pred_median": 4.079131944444445,
+      "pred_p75": 4.847274305555556,
+      "pred_template": 3.5,
+      "n_similar": 8,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "24c4851b-217a-43ae-a9e1-0546fd4e0b06",
+        "687203e0-8098-4501-99cf-b5d1a5ba4360",
+        "8d4b467d-d51d-4f88-8211-d5509bcd2565",
+        "023e0a9d-33f7-493f-9bd7-db6964e80710",
+        "973fbd25-56ef-4367-93d7-77244088f08a",
+        "434ee73e-ce24-4297-aa9f-62b2c9941daa",
+        "c7849df1-d03e-4b3a-9661-109566a35e5a",
+        "f12ff48e-3efa-48e7-8fe5-fb3b2303b804"
+      ]
+    },
+    {
+      "id": "68a733da-f890-43e6-9bd4-a2dfcd5a1ef2",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_prop_lantern_palace",
+      "asset_type": "Prop",
+      "task_type": "动画",
+      "task_type_key": "animation",
+      "actual": 2.502638888888889,
+      "pred_median": 2.5956597222222224,
+      "pred_p75": 2.8567881944444444,
+      "pred_template": 6.0,
+      "n_similar": 7,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "4d7a0303-98e3-4ec6-b0e1-1c2799021513",
+        "72ed58a0-b6b9-4029-bb4f-6f1bb38bda18",
+        "3b128348-a5cf-4a1c-a99d-05e7126a789f",
+        "11aeea4a-da4c-4e09-9802-86e9b557d8df",
+        "1966c445-3a9d-4025-8090-c914bf9a97c7",
+        "6438b13e-8834-480f-b17a-4847430856ad",
+        "e6614994-94e0-45fd-808d-6718c26a0d7d"
+      ]
+    },
+    {
+      "id": "b5f1aec1-ed4d-4992-8c43-3a851558e814",
+      "project": "P-Mobile｜风格化手游（模拟）",
+      "asset": "m_prop_axe",
+      "asset_type": "Prop",
+      "task_type": "原画",
+      "task_type_key": "concept",
+      "actual": 0.46444444444444444,
+      "pred_median": 1.0919097222222223,
+      "pred_p75": 1.2405381944444445,
+      "pred_template": 1.0,
+      "n_similar": 15,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "d18127b2-25e2-4e39-a34f-09e637d4be0c",
+        "7d3d12e6-86b9-4d73-99d7-6fb384847400",
+        "e7103c96-023f-4c81-b6a5-6afe2db7005a",
+        "90800e81-be03-4756-ae5a-d9e3b8580d60",
+        "0125212c-27a4-4502-a7af-036cb9b05cad",
+        "d3e3eb3c-7295-4615-bb96-b81d7f229a59",
+        "594e2e9e-b558-42cd-869e-d83b3a9fc6ae",
+        "fa5690c1-8733-4134-88f8-9ac8e23e2c89"
+      ]
+    },
+    {
+      "id": "b7a72808-25ac-4f59-9ef6-d73adb336716",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_character_villager_b",
+      "asset_type": "Character",
+      "task_type": "原画",
+      "task_type_key": "concept",
+      "actual": 4.429756944444445,
+      "pred_median": 2.6646180555555556,
+      "pred_p75": 4.3992708333333335,
+      "pred_template": 3.0,
+      "n_similar": 15,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "2b10d099-7908-4d8a-bb30-3d32f29cd9ca",
+        "8535ea8e-9dc9-4dd4-ac6f-4ed114fcce47",
+        "837c78a6-58a9-45a7-8ddf-db1895b409e2",
+        "9e053804-59c3-4950-9138-c1d6f3c394d9",
+        "ea9efc73-14e9-4499-8dc4-d19425caf50f",
+        "6215f764-1164-4fa4-a577-32575c6fbff0",
+        "f6f47304-0dd2-4087-9e0a-eecee201052a",
+        "84ca4135-ec33-4580-8129-e571ddfb73a9"
+      ]
+    },
+    {
+      "id": "41a59100-f3ed-4e4f-9802-f656f2edb9b9",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_character_scout_fei",
+      "asset_type": "Character",
+      "task_type": "建模",
+      "task_type_key": "modeling",
+      "actual": 7.738090277777777,
+      "pred_median": 5.866875,
+      "pred_p75": 6.499756944444444,
+      "pred_template": 4.0,
+      "n_similar": 9,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "1410b04b-99a6-4357-a9f7-1636aef5cea8",
+        "ccecca13-9f32-453e-a92d-21a36ea20c37",
+        "26120bae-d103-491a-825d-116231cc683e",
+        "bab3b49d-e2ab-4c61-8193-f00f3afe4959",
+        "0322ccb0-84b7-4c79-b12b-5fcd1093ebf3",
+        "abe61885-ce71-4394-a682-120ce27d4266",
+        "bb8ba133-a49d-4eb8-86a6-20957fbb253a",
+        "9c22b220-fbff-49ef-9ea2-d1c705e3f783"
+      ]
+    },
+    {
+      "id": "5a8803db-9c12-44b3-be6e-b2bfa10cf571",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_character_hero_min",
+      "asset_type": "Character",
+      "task_type": "建模",
+      "task_type_key": "modeling",
+      "actual": 6.0684375,
+      "pred_median": 5.866875,
+      "pred_p75": 6.499756944444444,
+      "pred_template": 4.0,
+      "n_similar": 9,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "1410b04b-99a6-4357-a9f7-1636aef5cea8",
+        "ccecca13-9f32-453e-a92d-21a36ea20c37",
+        "26120bae-d103-491a-825d-116231cc683e",
+        "bab3b49d-e2ab-4c61-8193-f00f3afe4959",
+        "0322ccb0-84b7-4c79-b12b-5fcd1093ebf3",
+        "abe61885-ce71-4394-a682-120ce27d4266",
+        "bb8ba133-a49d-4eb8-86a6-20957fbb253a",
+        "9c22b220-fbff-49ef-9ea2-d1c705e3f783"
+      ]
+    },
+    {
+      "id": "8ba85979-7508-467a-8972-093784868954",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_character_guard_captain",
+      "asset_type": "Character",
+      "task_type": "动画",
+      "task_type_key": "animation",
+      "actual": 5.995972222222222,
+      "pred_median": 6.016961805555555,
+      "pred_p75": 7.192795138888889,
+      "pred_template": 6.0,
+      "n_similar": 12,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "67de9b50-9ac2-4917-9c07-84be98dddb2b",
+        "7bbed4a3-4fc2-4790-b3fa-4780238e4f0f",
+        "87864fa0-b37d-48c3-8b11-46edbc9e7c7c",
+        "e4337e50-6dec-4f35-926d-421b1fadea9a",
+        "600ee799-46b5-40b2-aeb9-37b569034467",
+        "c06553a0-cbb0-473f-ac82-0bbe74aa660a",
+        "4d1d3cc3-6553-4894-be81-5714246e1195",
+        "399c6102-1631-4e90-8b6c-ab30f5862d15"
+      ]
+    },
+    {
+      "id": "d4931063-1401-4c7f-9570-d0a8a5a2942d",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_prop_umbrella_oil",
+      "asset_type": "Prop",
+      "task_type": "绑定",
+      "task_type_key": "rigging",
+      "actual": 1.1047222222222222,
+      "pred_median": 0.9778298611111111,
+      "pred_p75": 1.1820572916666667,
+      "pred_template": 4.0,
+      "n_similar": 6,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "0861be0f-3e17-4941-b3c1-8cc2b7f9ce49",
+        "bd752a4b-37a8-4b1e-b8c4-938e5f94dc4e",
+        "73665283-cc56-46b3-8f84-19eb079d6be3",
+        "22eb4f4c-0dee-4fbd-a72e-67634951a7c4",
+        "722e1c7f-5fb9-43b0-bd5f-795e42ed4d48",
+        "6ebfcb8b-14de-437a-b78a-1cf556d0d8f5"
+      ]
+    },
+    {
+      "id": "dc39a6c5-cef4-4f9c-b9bd-115237d77245",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_prop_seal_jade",
+      "asset_type": "Prop",
+      "task_type": "特效",
+      "task_type_key": "vfx",
+      "actual": 1.1208680555555555,
+      "pred_median": 1.65890625,
+      "pred_p75": 1.8635069444444443,
+      "pred_template": 3.0,
+      "n_similar": 6,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "ec523fae-3e8e-4e6d-8bf1-61fa63654523",
+        "fcacb5dd-ee2d-463c-9c89-7736569b9260",
+        "781c34c1-9d4a-48c6-adc5-de9aa559a5c5",
+        "c68d4f92-6cb1-4869-813b-7c7e326eea02",
+        "989bd652-6d00-4fda-8f32-a3355bb5b813",
+        "365a4c01-c1c3-4f77-b112-5d3ab6198f5d"
+      ]
+    },
+    {
+      "id": "231ccc4a-168a-4168-8892-53063da571d4",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_prop_shield_garrison",
+      "asset_type": "Prop",
+      "task_type": "特效",
+      "task_type_key": "vfx",
+      "actual": 1.2308680555555556,
+      "pred_median": 1.65890625,
+      "pred_p75": 1.8635069444444443,
+      "pred_template": 3.0,
+      "n_similar": 6,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "ec523fae-3e8e-4e6d-8bf1-61fa63654523",
+        "fcacb5dd-ee2d-463c-9c89-7736569b9260",
+        "781c34c1-9d4a-48c6-adc5-de9aa559a5c5",
+        "c68d4f92-6cb1-4869-813b-7c7e326eea02",
+        "989bd652-6d00-4fda-8f32-a3355bb5b813",
+        "365a4c01-c1c3-4f77-b112-5d3ab6198f5d"
+      ]
+    },
+    {
+      "id": "4bc53d38-6dee-40ca-80db-efe7fc898824",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_character_npc_blacksmith",
+      "asset_type": "Character",
+      "task_type": "绑定",
+      "task_type_key": "rigging",
+      "actual": 4.394895833333333,
+      "pred_median": 4.548107638888888,
+      "pred_p75": 5.1599305555555555,
+      "pred_template": 4.0,
+      "n_similar": 12,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "f85296d6-b13b-4934-8e5d-4c080b52e1ce",
+        "73059f86-5fb8-4aff-b0dc-b24f71201dd6",
+        "32374256-8364-42f6-8434-4944596cef23",
+        "7b28a861-7992-4867-84f6-3595efc639a6",
+        "556847e0-8ef0-4c71-a0b9-bb7c90e536f5",
+        "dae0ff56-e93f-48f6-afe4-227300bc6812",
+        "f51d5acb-4e9a-44f8-9296-6c61bdaaf25e",
+        "6b1c246e-e7e1-4c6c-830e-e4b3bdfc39b9"
+      ]
+    },
+    {
+      "id": "af497ff0-d850-4ddf-8d35-83e7c8f85c5c",
+      "project": "P-Mobile｜风格化手游（模拟）",
+      "asset": "m_character_npc_merchant",
+      "asset_type": "Character",
+      "task_type": "原画",
+      "task_type_key": "concept",
+      "actual": 1.73375,
+      "pred_median": 2.6646180555555556,
+      "pred_p75": 4.3992708333333335,
+      "pred_template": 1.0,
+      "n_similar": 15,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "2b10d099-7908-4d8a-bb30-3d32f29cd9ca",
+        "8535ea8e-9dc9-4dd4-ac6f-4ed114fcce47",
+        "837c78a6-58a9-45a7-8ddf-db1895b409e2",
+        "9e053804-59c3-4950-9138-c1d6f3c394d9",
+        "ea9efc73-14e9-4499-8dc4-d19425caf50f",
+        "6215f764-1164-4fa4-a577-32575c6fbff0",
+        "f6f47304-0dd2-4087-9e0a-eecee201052a",
+        "84ca4135-ec33-4580-8129-e571ddfb73a9"
+      ]
+    },
+    {
+      "id": "67dbfd56-b34a-4114-8321-24ec035b5d8c",
+      "project": "P-Mobile｜风格化手游（模拟）",
+      "asset": "m_prop_potion_blue",
+      "asset_type": "Prop",
+      "task_type": "原画",
+      "task_type_key": "concept",
+      "actual": 0.5,
+      "pred_median": 1.0919097222222223,
+      "pred_p75": 1.2405381944444445,
+      "pred_template": 1.0,
+      "n_similar": 15,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "d18127b2-25e2-4e39-a34f-09e637d4be0c",
+        "7d3d12e6-86b9-4d73-99d7-6fb384847400",
+        "e7103c96-023f-4c81-b6a5-6afe2db7005a",
+        "90800e81-be03-4756-ae5a-d9e3b8580d60",
+        "0125212c-27a4-4502-a7af-036cb9b05cad",
+        "d3e3eb3c-7295-4615-bb96-b81d7f229a59",
+        "594e2e9e-b558-42cd-869e-d83b3a9fc6ae",
+        "fa5690c1-8733-4134-88f8-9ac8e23e2c89"
+      ]
+    },
+    {
+      "id": "8518b748-1e83-4212-9d45-6739908442ff",
+      "project": "P-Character｜角色全流程（模拟）",
+      "asset": "c_character_villager_b",
+      "asset_type": "Character",
+      "task_type": "特效",
+      "task_type_key": "vfx",
+      "actual": 2.8197569444444444,
+      "pred_median": 2.3280208333333334,
+      "pred_p75": 2.676588541666667,
+      "pred_template": 3.0,
+      "n_similar": 14,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "87ddf646-a20b-419f-8f1f-7fada8be196e",
+        "beed7fb1-2e69-4bdc-a3f3-2a0f04571344",
+        "c8ae2fec-6f56-4f15-a9f1-23b34f1f6cb8",
+        "d12fd8bc-837d-451d-9af0-c6f31ec18977",
+        "c30135b5-9957-41c3-b125-59fcd39528c4",
+        "c307b3d1-e3d3-49f5-97f1-074826952783",
+        "d2a2ee70-f1bc-4655-b9e7-90be78da69bf",
+        "e62edd4b-176b-43bb-bf8c-d566318ddda2"
+      ]
+    },
+    {
+      "id": "b5b87360-4c62-4fef-848a-c074622f4793",
+      "project": "P-Mobile｜风格化手游（模拟）",
+      "asset": "m_character_mascot_panda",
+      "asset_type": "Character",
+      "task_type": "制作",
+      "task_type_key": "production",
+      "actual": 4.929895833333333,
+      "pred_median": 2.982378472222222,
+      "pred_p75": 3.3058854166666665,
+      "pred_template": 2.0,
+      "n_similar": 6,
+      "source": "similar",
+      "low_confidence": false,
+      "similar_ids": [
+        "6e1f08dd-2ddc-4217-9391-7c9802ba5658",
+        "ec4c3aa1-fd0d-45e4-8182-0bfda073705d",
+        "516a3794-e546-4f54-ba28-8f19e3ed229d",
+        "7cd17403-a043-47a6-901f-f066bc44e78a",
+        "f9473621-ed5d-4406-94cb-80f33db4bd80",
+        "d67b8669-c9d8-497c-84fa-2e8967231cbd"
+      ]
+    }
+  ],
+  "open_intent": {
+    "circularity_note": "进行中样本的逾期/超估/返修/依赖/SLA 意图在生成时就是按这些规则的定义注入的，本表是一致性检查，不是预测能力。comment_blocker 不在规则层，预期规则不报。",
+    "by_kind": {
+      "overdue": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "tn": 18,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support_pos": 2,
+        "support_neg": 18
+      },
+      "overrun": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "tn": 18,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support_pos": 2,
+        "support_neg": 18
+      },
+      "high_retake": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "tn": 18,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support_pos": 2,
+        "support_neg": 18
+      },
+      "dep_blocked": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "tn": 18,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support_pos": 2,
+        "support_neg": 18
+      },
+      "sla_overdue": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "tn": 18,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support_pos": 2,
+        "support_neg": 18
+      }
+    },
+    "details": [
+      {
+        "task_id": "8a7030e7-c669-4144-a8e7-9e9b00533ebf",
+        "asset": "m_ui_open_shop",
+        "task_type": "制作",
+        "scenario": "open_overdue",
+        "intended": [
+          "overdue"
+        ],
+        "fired": [
+          "overdue"
+        ],
+        "note": "注入逾期：due=2026-11-08，as_of=2026-11-13，模板宽限 0 天，未完成。"
+      },
+      {
+        "task_id": "bd6434f8-3d73-468e-80d8-f8aac9118336",
+        "asset": "m_prop_open_chest",
+        "task_type": "制作",
+        "scenario": "open_overrun",
+        "intended": [
+          "overrun"
+        ],
+        "fired": [
+          "overrun"
+        ],
+        "note": "注入超估：实耗 2.8 人天 / 模板估时 2.0 = 1.4 ≥ 1.2，due 在未来故不应报逾期。"
+      },
+      {
+        "task_id": "8ed4b1dc-e5f9-484f-8fa2-4f67034e725e",
+        "asset": "m_character_open_panda",
+        "task_type": "制作",
+        "scenario": "open_high_retake",
+        "intended": [
+          "high_retake"
+        ],
+        "fired": [
+          "high_retake"
+        ],
+        "note": "注入高返修：retake_count=3，阈值 2。日期未逾期。"
+      },
+      {
+        "task_id": "76539fd8-8405-438f-a37d-f9576d4bc7cd",
+        "asset": "m_prop_open_lantern",
+        "task_type": "原画",
+        "scenario": "open_dep_pred",
+        "intended": [],
+        "fired": [],
+        "note": "依赖阻塞场景的前序：原画未完成。本身日期未逾期。"
+      },
+      {
+        "task_id": "ff8996c1-f694-4689-8f1b-2aed37495c8e",
+        "asset": "m_prop_open_lantern",
+        "task_type": "制作",
+        "scenario": "open_dep_blocked",
+        "intended": [
+          "dep_blocked"
+        ],
+        "fired": [
+          "dep_blocked"
+        ],
+        "note": "注入依赖阻塞：制作 start=2026-11-10 已到，同资产原画仍为 wip。"
+      },
+      {
+        "task_id": "c8222907-18a2-42b7-8b27-febc5d111e7e",
+        "asset": "m_ui_open_ok",
+        "task_type": "入库检查",
+        "scenario": "open_sla",
+        "intended": [
+          "sla_overdue"
+        ],
+        "fired": [
+          "sla_overdue"
+        ],
+        "note": "注入超 SLA：11-10 进入 wfa，as_of=11-13，SLA=1 天。"
+      },
+      {
+        "task_id": "7bf12341-f14e-4e6e-9814-a4e9d0416621",
+        "asset": "m_prop_open_coin",
+        "task_type": "制作",
+        "scenario": "open_near_miss",
+        "intended": [],
+        "fired": [],
+        "note": "临界负例：due=as_of 当天（宽限 0，规则应不报逾期）；实耗/估时=1.15 < 1.2，不报超估。"
+      },
+      {
+        "task_id": "ad07edf7-9a8a-45cf-9e3e-39980e2bdd8c",
+        "asset": "m_ui_open_banner",
+        "task_type": "制作",
+        "scenario": "open_comment_blocker",
+        "intended": [
+          "comment_blocker"
+        ],
+        "fired": [],
+        "note": "仅评论阻塞：日期与工时看起来正常，备注写「等主美…先搁着」。规则层不应报，关键词/LLM 应报。"
+      },
+      {
+        "task_id": "a3775197-4ea3-4afe-bb58-5a782b0aff15",
+        "asset": "m_prop_open_sword",
+        "task_type": "制作",
+        "scenario": "open_sarcasm",
+        "intended": [],
+        "fired": [],
+        "note": "反话评论：含「重做」但「开玩笑的，这次一次过」。关键词基线预期误报，真值不是阻塞。"
+      },
+      {
+        "task_id": "0d6ae0fd-f6f5-40e7-9c47-5dc1da7997d9",
+        "asset": "m_ui_open_close",
+        "task_type": "制作",
+        "scenario": "open_misleading",
+        "intended": [],
+        "fired": [],
+        "note": "误导评论：在说上次的重做，这次没问题。关键词基线预期误报。"
+      },
+      {
+        "task_id": "8ac4deae-0080-47e0-87aa-fa9e4e62b88e",
+        "asset": "c_character_hero_demo",
+        "task_type": "建模",
+        "scenario": "open_overdue",
+        "intended": [
+          "overdue"
+        ],
+        "fired": [
+          "overdue"
+        ],
+        "note": "注入逾期：due=2026-11-10，宽限 1 天，截止 11-11，as_of=11-13。"
+      },
+      {
+        "task_id": "70e4a643-c3f3-4e7a-98c8-ecb209a74dec",
+        "asset": "c_character_grace_window",
+        "task_type": "建模",
+        "scenario": "open_in_grace",
+        "intended": [],
+        "fired": [],
+        "note": "宽限期内负例：due=11-12，宽限 1 天，deadline=11-13，as_of<=deadline，规则按设计不报逾期。这是产品取舍，不是漏报。"
+      },
+      {
+        "task_id": "d36a4d77-e596-4e36-b93a-d1a4024eb728",
+        "asset": "c_character_retake_one",
+        "task_type": "贴图",
+        "scenario": "open_high_retake",
+        "intended": [
+          "high_retake"
+        ],
+        "fired": [
+          "high_retake"
+        ],
+        "note": "注入高返修：retake_count=1，本模板阈值 1（比手游更严）。"
+      },
+      {
+        "task_id": "9b58ed2f-d501-4b86-9511-03f0747cd3ee",
+        "asset": "c_character_overrun",
+        "task_type": "贴图",
+        "scenario": "open_overrun",
+        "intended": [
+          "overrun"
+        ],
+        "fired": [
+          "overrun"
+        ],
+        "note": "注入超估：实耗 4.3 / 估时 3.5 ≈ 1.23 ≥ 1.15，due 在未来。"
+      },
+      {
+        "task_id": "ae63e938-44eb-4d6a-a5bf-378d4926d409",
+        "asset": "c_character_dep_block",
+        "task_type": "贴图",
+        "scenario": "open_dep_pred",
+        "intended": [],
+        "fired": [],
+        "note": "依赖阻塞的前序贴图，仍为 wip。"
+      },
+      {
+        "task_id": "932148bf-7b77-46bb-9a8b-7d7214664f63",
+        "asset": "c_character_dep_block",
+        "task_type": "绑定",
+        "scenario": "open_dep_blocked",
+        "intended": [
+          "dep_blocked"
+        ],
+        "fired": [
+          "dep_blocked"
+        ],
+        "note": "注入依赖阻塞：绑定 start 已到，同资产贴图未完成（模板规定 绑定 依赖 贴图）。"
+      },
+      {
+        "task_id": "1d348c67-b7a4-4ebb-ad83-c99fcf538fb7",
+        "asset": "c_character_sla",
+        "task_type": "动画",
+        "scenario": "open_sla",
+        "intended": [
+          "sla_overdue"
+        ],
+        "fired": [
+          "sla_overdue"
+        ],
+        "note": "注入超 SLA：11-08 进入 wfa，as_of=11-13，已等 5 天，SLA=3。"
+      },
+      {
+        "task_id": "f5738083-a06f-4865-ab87-9a518b3d1627",
+        "asset": "c_character_wiring",
+        "task_type": "绑定",
+        "scenario": "open_comment_blocker",
+        "intended": [
+          "comment_blocker"
+        ],
+        "fired": [],
+        "note": "仅评论阻塞：规则层日期/工时正常；备注明确「布线要重做」。"
+      },
+      {
+        "task_id": "2f0910e1-2924-408b-a51b-93e8ba95e13a",
+        "asset": "c_prop_sarcasm",
+        "task_type": "建模",
+        "scenario": "open_sarcasm",
+        "intended": [],
+        "fired": [],
+        "note": "反话评论，关键词可能误报「重做」。"
+      },
+      {
+        "task_id": "2eae94af-9a8b-4780-bb82-d2623fc6f656",
+        "asset": "c_prop_misleading",
+        "task_type": "建模",
+        "scenario": "open_misleading",
+        "intended": [],
+        "fired": [],
+        "note": "误导评论，关键词可能把「重做」当当前阻塞。"
+      }
+    ],
+    "n_open": 20
+  },
+  "retrospective": {
+    "n_reconstructed": 99,
+    "as_of_rule": "due_date 减去 2 个日历日，且须满足 start <= as_of < done_date。",
+    "ground_truth": "was_late = done_date > due_date（生成时写入，来自实际完成日与截止日，不是规则输出）。",
+    "rule_only": {
+      "tp": 2,
+      "fp": 17,
+      "fn": 12,
+      "tn": 68,
+      "precision": 0.10526315789473684,
+      "recall": 0.14285714285714285,
+      "f1": 0.12121212121212122,
+      "support_pos": 14,
+      "support_neg": 85
+    },
+    "rule_or_keyword": {
+      "tp": 6,
+      "fp": 24,
+      "fn": 8,
+      "tn": 61,
+      "precision": 0.2,
+      "recall": 0.42857142857142855,
+      "f1": 0.27272727272727276,
+      "support_pos": 14,
+      "support_neg": 85
+    },
+    "late_rate": 0.1414141414141414
+  },
+  "retrospective_sample": [
+    {
+      "id": "3a7058c8-d0e5-4e2e-874b-c193dd206097",
+      "asset": "m_prop_arrow",
+      "task_type": "制作",
+      "asset_type": "prop",
+      "project": "p_mobile",
+      "as_of": "2026-08-08",
+      "due": "2026-08-10",
+      "done": "2026-08-10",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 2,
+      "duration_then_days": 2.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "d5f727c5-490a-412f-9295-a4a2249b87e5",
+      "asset": "m_prop_potion_blue",
+      "task_type": "制作",
+      "asset_type": "prop",
+      "project": "p_mobile",
+      "as_of": "2026-08-02",
+      "due": "2026-08-04",
+      "done": "2026-08-03",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 2,
+      "duration_then_days": 1.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "3f62eeef-ae01-431c-aa02-4000d06cffcf",
+      "asset": "m_prop_chest",
+      "task_type": "原画",
+      "asset_type": "prop",
+      "project": "p_mobile",
+      "as_of": "2026-09-19",
+      "due": "2026-09-21",
+      "done": "2026-09-21",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 2,
+      "duration_then_days": 1.0,
+      "estimation_days": 1.0,
+      "retake_then": 0
+    },
+    {
+      "id": "94551c78-f64d-4ced-99bc-50875e669a18",
+      "asset": "m_prop_chest",
+      "task_type": "制作",
+      "asset_type": "prop",
+      "project": "p_mobile",
+      "as_of": "2026-08-25",
+      "due": "2026-08-27",
+      "done": "2026-08-27",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 1,
+      "duration_then_days": 1.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "b6222637-d766-4b74-a179-cf5544ae9fda",
+      "asset": "m_prop_barrel",
+      "task_type": "制作",
+      "asset_type": "prop",
+      "project": "p_mobile",
+      "as_of": "2026-09-14",
+      "due": "2026-09-16",
+      "done": "2026-09-15",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 2,
+      "duration_then_days": 0.5,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "7cdc8129-a1be-4b6a-bc8c-c5df0d3a2642",
+      "asset": "m_ui_icon_mail",
+      "task_type": "原画",
+      "asset_type": "ui",
+      "project": "p_mobile",
+      "as_of": "2026-10-03",
+      "due": "2026-10-05",
+      "done": "2026-10-05",
+      "was_late": false,
+      "fired_rule": true,
+      "fired_rule_or_keyword": true,
+      "rule_kinds": [
+        "high_retake"
+      ],
+      "n_comments_then": 4,
+      "duration_then_days": 1.0,
+      "estimation_days": 1.0,
+      "retake_then": 2
+    },
+    {
+      "id": "6877b2b5-f864-4491-a7ca-60662dbf4543",
+      "asset": "m_ui_slot_item",
+      "task_type": "制作",
+      "asset_type": "ui",
+      "project": "p_mobile",
+      "as_of": "2026-09-09",
+      "due": "2026-09-11",
+      "done": "2026-09-11",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 1,
+      "duration_then_days": 1.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "b5b87360-4c62-4fef-848a-c074622f4793",
+      "asset": "m_character_mascot_panda",
+      "task_type": "制作",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-09-30",
+      "due": "2026-10-02",
+      "done": "2026-10-02",
+      "was_late": false,
+      "fired_rule": true,
+      "fired_rule_or_keyword": true,
+      "rule_kinds": [
+        "overrun"
+      ],
+      "n_comments_then": 1,
+      "duration_then_days": 3.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "6e1f08dd-2ddc-4217-9391-7c9802ba5658",
+      "asset": "m_character_mascot_fox",
+      "task_type": "制作",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-08-23",
+      "due": "2026-08-25",
+      "done": "2026-08-25",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 1,
+      "duration_then_days": 2.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "516a3794-e546-4f54-ba28-8f19e3ed229d",
+      "asset": "m_character_npc_merchant",
+      "task_type": "制作",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-09-12",
+      "due": "2026-09-14",
+      "done": "2026-09-14",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 2,
+      "duration_then_days": 2.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "d67b8669-c9d8-497c-84fa-2e8967231cbd",
+      "asset": "m_character_npc_guard",
+      "task_type": "制作",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-09-23",
+      "due": "2026-09-25",
+      "done": "2026-09-28",
+      "was_late": true,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 1,
+      "duration_then_days": 1.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "ea9efc73-14e9-4499-8dc4-d19425caf50f",
+      "asset": "m_character_hero_sage",
+      "task_type": "原画",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-08-19",
+      "due": "2026-08-21",
+      "done": "2026-08-20",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 1,
+      "duration_then_days": 1.0,
+      "estimation_days": 1.0,
+      "retake_then": 0
+    },
+    {
+      "id": "06bd2ce7-7e24-4e31-a438-8ae5e134ca4a",
+      "asset": "m_character_pet_bird",
+      "task_type": "原画",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-09-14",
+      "due": "2026-09-16",
+      "done": "2026-09-15",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 1,
+      "duration_then_days": 1.0,
+      "estimation_days": 1.0,
+      "retake_then": 0
+    },
+    {
+      "id": "320510b0-dab1-4b57-b6c0-70b783e1fe00",
+      "asset": "m_character_crowd_a",
+      "task_type": "制作",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-10-07",
+      "due": "2026-10-09",
+      "done": "2026-10-08",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 1,
+      "duration_then_days": 2.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "933d41be-b762-4ea0-be12-de3a834aee82",
+      "asset": "m_character_crowd_b",
+      "task_type": "原画",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-10-03",
+      "due": "2026-10-05",
+      "done": "2026-10-05",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 2,
+      "duration_then_days": 1.0,
+      "estimation_days": 1.0,
+      "retake_then": 0
+    },
+    {
+      "id": "982dddac-8692-4e53-afb5-fea6e83e3f5f",
+      "asset": "m_character_boss_slime",
+      "task_type": "制作",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-10-14",
+      "due": "2026-10-16",
+      "done": "2026-10-16",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 2,
+      "duration_then_days": 2.0,
+      "estimation_days": 2.0,
+      "retake_then": 0
+    },
+    {
+      "id": "b3d9a6ab-5605-43dd-b7fd-4181cd4799be",
+      "asset": "m_character_child_npc",
+      "task_type": "原画",
+      "asset_type": "character",
+      "project": "p_mobile",
+      "as_of": "2026-09-05",
+      "due": "2026-09-07",
+      "done": "2026-09-07",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 2,
+      "duration_then_days": 1.0,
+      "estimation_days": 1.0,
+      "retake_then": 0
+    },
+    {
+      "id": "3f6ec007-eb68-41d6-a796-eaa327e9ac1e",
+      "asset": "c_character_hero_ling",
+      "task_type": "原画",
+      "asset_type": "character",
+      "project": "p_character",
+      "as_of": "2026-10-07",
+      "due": "2026-10-09",
+      "done": "2026-10-08",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 2,
+      "duration_then_days": 2.5,
+      "estimation_days": 3.0,
+      "retake_then": 0
+    },
+    {
+      "id": "8d91bb28-e759-4801-8df5-eb86787d468f",
+      "asset": "c_character_hero_ling",
+      "task_type": "建模",
+      "asset_type": "character",
+      "project": "p_character",
+      "as_of": "2026-10-14",
+      "due": "2026-10-16",
+      "done": "2026-10-16",
+      "was_late": false,
+      "fired_rule": false,
+      "fired_rule_or_keyword": false,
+      "rule_kinds": [],
+      "n_comments_then": 1,
+      "duration_then_days": 2.0,
+      "estimation_days": 4.0,
+      "retake_then": 0
+    },
+    {
+      "id": "e6b91a6c-6cc1-4e60-8e20-679d319b8525",
+      "asset": "c_character_hero_ling",
+      "task_type": "贴图",
+      "asset_type": "character",
+      "project": "p_character",
+      "as_of": "2026-10-03",
+      "due": "2026-10-05",
+      "done": "2026-10-05",
+      "was_late": false,
+      "fired_rule": true,
+      "fired_rule_or_keyword": true,
+      "rule_kinds": [
+        "high_retake"
+      ],
+      "n_comments_then": 2,
+      "duration_then_days": 2.5,
+      "estimation_days": 3.5,
+      "retake_then": 1
+    }
+  ],
+  "comments": {
+    "n_labeled": 149,
+    "by_label": {
+      "blocker": 36,
+      "sarcasm": 18,
+      "misleading": 20,
+      "normal": 75
+    },
+    "keyword_baseline": {
+      "tp": 36,
+      "fp": 33,
+      "fn": 0,
+      "tn": 80,
+      "precision": 0.5217391304347826,
+      "recall": 1.0,
+      "f1": 0.6857142857142856,
+      "support_pos": 36,
+      "support_neg": 113
+    },
+    "note": "关键词基线，不是 LLM。反话和「上次重做」是预期误报来源。",
+    "llm": {
+      "ran": false,
+      "note": "未调用真实 LLM，不报告模型忠实度 / 幻觉率。"
+    }
+  },
+  "comments_fps": [
+    {
+      "task_id": "aa42b99f-bc41-489d-bf6d-52b7674b384c",
+      "asset": "m_prop_lantern",
+      "text": "建议重做——如果这是三个月前的版本。现在过了。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "2f11be07-4f84-420e-aa8f-86f87c76eb8c",
+      "asset": "m_prop_lantern",
+      "text": "备注：上次重做是因为布线，这次已经修完了。",
+      "label": "misleading",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "bb2fe077-896c-45fb-a55b-75be5d61caf7",
+      "asset": "m_ui_btn_close",
+      "text": "重做记录见 v3 评论，v4 已通过。",
+      "label": "misleading",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "a1cb7f1a-6753-497f-a3e2-c36d115cd1bc",
+      "asset": "m_ui_icon_shop",
+      "text": "建议重做——如果这是三个月前的版本。现在过了。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "aad1d362-cbaf-44be-8188-04eb5280f31c",
+      "asset": "m_ui_banner_event",
+      "text": "备注：上次重做是因为布线，这次已经修完了。",
+      "label": "misleading",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "2a72decb-4205-4b3c-a376-69e21eefc4a7",
+      "asset": "m_ui_hp_bar",
+      "text": "这个重做是上次的，这次拓扑没问题。",
+      "label": "misleading",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "5512ea36-9a6b-4fc2-83a0-05e682ccde50",
+      "asset": "m_ui_hp_bar",
+      "text": "重做记录见 v3 评论，v4 已通过。",
+      "label": "misleading",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "a6501256-a653-4645-a480-d5c6857110da",
+      "asset": "m_character_mascot_fox",
+      "text": "不要重做，保持现状。",
+      "label": "misleading",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "d7dd03ad-7507-403a-8e2d-8ac1001c7b9c",
+      "asset": "m_character_npc_merchant",
+      "text": "又双叒重做？开玩笑的，这次一次过。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "f8581b0f-1fc0-4b9a-b433-56727c699c73",
+      "asset": "m_character_hero_sage",
+      "text": "建议重做——如果这是三个月前的版本。现在过了。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "529879aa-5e2c-41be-9102-f67bc9dfd54e",
+      "asset": "m_character_crowd_a",
+      "text": "建议重做——如果这是三个月前的版本。现在过了。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "92488959-f0aa-4566-b246-77cae6933a84",
+      "asset": "m_character_child_npc",
+      "text": "又双叒重做？开玩笑的，这次一次过。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "a3775197-4ea3-4afe-bb58-5a782b0aff15",
+      "asset": "m_prop_open_sword",
+      "text": "又双叒重做？开玩笑的，这次一次过。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "open_sarcasm"
+    },
+    {
+      "task_id": "0d6ae0fd-f6f5-40e7-9c47-5dc1da7997d9",
+      "asset": "m_ui_open_close",
+      "text": "这个重做是上次的，这次拓扑没问题。",
+      "label": "misleading",
+      "reason": null,
+      "scenario": "open_misleading"
+    },
+    {
+      "task_id": "c06553a0-cbb0-473f-ac82-0bbe74aa660a",
+      "asset": "c_character_hero_zhao",
+      "text": "建议重做——如果这是三个月前的版本。现在过了。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "5a8803db-9c12-44b3-be6e-b2bfa10cf571",
+      "asset": "c_character_hero_min",
+      "text": "又双叒重做？开玩笑的，这次一次过。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "abe61885-ce71-4394-a682-120ce27d4266",
+      "asset": "c_character_npc_innkeeper",
+      "text": "不要重做，保持现状。",
+      "label": "misleading",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "2b10d099-7908-4d8a-bb30-3d32f29cd9ca",
+      "asset": "c_character_npc_diviner",
+      "text": "不要重做，保持现状。",
+      "label": "misleading",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "ccecca13-9f32-453e-a92d-21a36ea20c37",
+      "asset": "c_character_boss_tiger",
+      "text": "又双叒重做？开玩笑的，这次一次过。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    },
+    {
+      "task_id": "429cc465-a4cb-442f-a9fe-9ca06e68970a",
+      "asset": "c_character_boss_crane",
+      "text": "又一次完美通过（并没有）重做吧重做吧，开玩笑的，这次过了。",
+      "label": "sarcasm",
+      "reason": null,
+      "scenario": "historical_completed"
+    }
+  ],
+  "comments_fns": [],
+  "scan_latency": [
+    {
+      "project": "P-Mobile｜风格化手游（模拟）",
+      "n_tasks": 136,
+      "n_rule_cards": 5,
+      "n_keyword_cards": 30,
+      "latency_ms": {
+        "rule": 0.22,
+        "keyword": 1.14,
+        "llm": 0.0,
+        "total": 1.37
+      }
+    },
+    {
+      "project": "P-Character｜角色全流程（模拟）",
+      "n_tasks": 177,
+      "n_rule_cards": 5,
+      "n_keyword_cards": 39,
+      "latency_ms": {
+        "rule": 0.27,
+        "keyword": 1.52,
+        "llm": 0.0,
+        "total": 1.79
+      }
+    }
+  ],
+  "llm_usage": {
+    "backend": "disabled",
+    "n_calls": 0,
+    "n_ok": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_ms": 0.0,
+    "estimated_cny": 0.0,
+    "note": "未调用真实模型，不得填写 LLM 评测数字。"
+  },
+  "env": {
+    "python": "3.13.5",
+    "platform": "Linux-6.12.113+-x86_64-with-glibc2.41",
+    "as_of": "2026-11-13",
+    "llm_backend": "disabled"
+  },
+  "live_latency": {
+    "rows": [
+      {
+        "project": "P-Mobile｜风格化手游（模拟）",
+        "n_tasks": 136,
+        "gazu_load_ms": 76.79,
+        "rule_scan_ms": 0.25,
+        "keyword_ms": 1.28,
+        "total_ms": 78.32,
+        "n_rule_cards": 5
+      },
+      {
+        "project": "P-Character｜角色全流程（模拟）",
+        "n_tasks": 177,
+        "gazu_load_ms": 72.99,
+        "rule_scan_ms": 0.42,
+        "keyword_ms": 1.9,
+        "total_ms": 75.31,
+        "n_rule_cards": 5
+      }
+    ],
+    "total_ms": 423.44,
+    "note": "含本地 Docker 里 Zou API 的往返，不含 LLM。"
+  }
+}

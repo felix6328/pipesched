@@ -1,0 +1,32 @@
+# PipeSched 本地设置。Kitsu 账号是官方 cgwire/cgwire 镜像的文档默认值，
+# 不是真实工作室凭据。换自己的实例时请改这里或用环境变量覆盖。
+kitsu:
+  host: http://127.0.0.1:8878/api
+  email: admin@example.com
+  password: mysecretpassword
+
+# 评测与规则扫描的「今天」。写死以便复现，不要用机器墙钟冒充同一轮结果。
+as_of: "2026-11-13"
+
+estimate:
+  min_similar: 3
+  # 排期建议默认用 P75 留缓冲；MAPE 主指标用中位数，两套都报告。
+  schedule_stat: p75
+
+llm:
+  # auto: 环境里有 OPENAI_API_KEY（或 PIPESCHED_API_KEY）就走 OpenAI 兼容接口，
+  # 否则 disabled。规则层与关键词基线不依赖此项。
+  backend: auto
+  base_url: "${OPENAI_BASE_URL}"
+  model: "${OPENAI_MODEL}"
+  api_key: "${OPENAI_API_KEY}"
+  timeout_seconds: 30
+  max_comment_chars: 400
+
+app:
+  host: 127.0.0.1
+  port: 8879
+
+templates:
+  p_mobile: configs/templates/p_mobile.yaml
+  p_character: configs/templates/p_character.yaml

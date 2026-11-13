@@ -1,0 +1,3 @@
+开发时环境：Python 3.13.5。pytest 仅用于本地测试，不在运行依赖里。
+Kitsu / Zou 通过官方 Docker 镜像 cgwire/cgwire:1.0.79 部署，不通过 pip 安装 Zou。
+Gazu 是官方 LGPL 客户端，本仓库不修改、不捆绑其源码。

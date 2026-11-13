@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+.python-version
+.DS_Store
+data/audit/*.jsonl
+data/shadow/*.json
+data/cost/*.jsonl
+# snapshot/manifest 随仓库提供，便于无 Kitsu 时复现评测
+# keep directory placeholders
+!data/gold/.gitkeep
+!data/audit/.gitkeep
+!data/shadow/.gitkeep
+!data/cost/.gitkeep
+.env
+.env.local

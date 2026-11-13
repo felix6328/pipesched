@@ -1,0 +1,10 @@
+PipeSched 是旁路于 Kitsu / Zou 的独立服务，本仓库源码以 MIT 许可。
+
+本仓库不包含、不修改、不 fork Kitsu 或 Zou 的源代码。演示时通过官方 Docker
+镜像 cgwire/cgwire:1.0.79 部署，许可证为 AGPL-3.0。若你修改 Kitsu / Zou 并以
+网络服务形式对外提供，需要自行遵守 AGPL 的相应义务。
+
+官方 Python 客户端 Gazu 为 LGPL-3.0，本项目仅作为库使用，未修改其源码。
+
+种子数据全部为脚本合成，资产名是占位符，不是 Kenney 或其他公开资产库的文件，
+也不是任何游戏项目组的真实资产。

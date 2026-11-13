@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PipeSched｜美术制作排期与进度风险</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo">PS</div>
+      <div>
+        <h1>PipeSched</h1>
+        <p class="sub">Kitsu 旁路 Agent · 不改内核 · 合成模拟数据</p>
+      </div>
+    </div>
+    <div class="status" id="status">正在检查 Kitsu…</div>
+  </header>
+
+  <div class="banner" id="banner" hidden></div>
+  <div class="banner warn" id="synth">两个项目都是脚本生成的合成数据，不是真实项目组，也不是腾讯的系统。</div>
+
+  <nav class="tabs">
+    <button data-tab="risk" class="active">风险扫描</button>
+    <button data-tab="sched">排期建议</button>
+    <button data-tab="tmpl">模板与平台化</button>
+    <button data-tab="audit">审计日志</button>
+  </nav>
+
+  <section class="toolbar">
+    <label>项目
+      <select id="project"></select>
+    </label>
+    <span class="meta" id="meta"></span>
+  </section>
+
+  <main>
+    <section id="tab-risk" class="panel active">
+      <div class="row-head">
+        <h2>规则层风险卡</h2>
+        <button id="btn-scan" class="primary">扫描项目</button>
+      </div>
+      <p class="hint">日期、实耗、返修次数只来自 Kitsu API 字段。规则不用模型。LLM 不可用时这里仍然能独立工作。</p>
+      <div id="risk-rules" class="cards"></div>
+      <h2>备注解读（关键词基线）</h2>
+      <p class="hint">带「keyword」标记的是确定性关键词，不是大模型。反话和「上次重做」会误报，这是已知代价。</p>
+      <div id="risk-kw" class="cards"></div>
+      <h2>LLM 解读</h2>
+      <div id="risk-llm"></div>
+      <details class="tasks-box">
+        <summary>任务一览（只读，字段来自 Kitsu）</summary>
+        <div id="task-table"></div>
+      </details>
+    </section>
+
+    <section id="tab-sched" class="panel">
+      <div class="row-head">
+        <h2>排期建议</h2>
+        <button id="btn-sched" class="primary">生成建议</button>
+      </div>
+      <p class="hint">估时来自同类已完成任务的中位数 / P75（排期默认 P75），没有同类则回退模板默认并标低置信。写回必须填写确认人并点确认；无令牌的接口会拒绝。</p>
+      <div id="sched-table"></div>
+      <div class="confirm-bar">
+        <label>制片确认人 <input id="confirmed-by" placeholder="例如：张三（模拟）" /></label>
+        <button id="btn-confirm" class="primary">确认写回已勾选</button>
+        <button id="btn-deny">演示：无令牌应被拒绝</button>
+      </div>
+      <pre id="confirm-msg" class="msg"></pre>
+    </section>
+
+    <section id="tab-tmpl" class="panel">
+      <h2>同一套引擎，两套模板</h2>
+      <p class="hint">换项目只换 YAML：工序 DAG、默认估时、返修阈值、外包 SLA、周产能。不改代码。</p>
+      <div id="tmpl-view" class="tmpl-grid"></div>
+    </section>
+
+    <section id="tab-audit" class="panel">
+      <div class="row-head">
+        <h2>写回审计</h2>
+        <button id="btn-audit">刷新</button>
+      </div>
+      <p class="hint">每次尝试都会记，包括被拒绝的。拒绝不会改 Kitsu。</p>
+      <div id="audit-table"></div>
+    </section>
+  </main>
+
+  <footer>
+    PipeSched v1 · 旁路服务，Kitsu / Zou 为 AGPL，本仓库不修改其内核 · 个人项目，非腾讯
+  </footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>
