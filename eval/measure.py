@@ -27,6 +27,7 @@ from pipesched.config import load_all_templates, load_settings
 from pipesched.estimate import estimate_task
 from pipesched.kitsu_client import load_snapshot, tasks_from_snapshot
 from pipesched.llm import DisabledLLM, resolve_backend
+from llm_metrics import evaluate_comments, load_gold_comments
 from pipesched.models import Comment, Task, days_to_seconds
 from pipesched.paths import GOLD, EVAL
 from pipesched.risk import scan_project, scan_task
@@ -312,7 +313,7 @@ def reconstruct(tp, tmpl, as_of, all_plans_of_asset):
     return t
 
 
-def eval_retrospective(manifest, templates, as_of_offset_days=2):
+def eval_retrospective(manifest, templates, as_of_offset_days=2, llm_pred_by_text=None):
     rows = []
     for key, block in manifest["projects"].items():
         tmpl = templates[key]
@@ -377,6 +378,21 @@ def eval_retrospective(manifest, templates, as_of_offset_days=2):
             gold_late = bool(tp.get("was_late"))
             fired_rule = len(cards) > 0
             fired_any = fired_rule or any(e.is_blocker for e in kw)
+            llm_hit = False
+            n_llm_mapped = 0
+            n_llm_unmapped = 0
+            if llm_pred_by_text:
+                for c in t.comments:
+                    text = (c.text or "").strip()
+                    if not text:
+                        continue
+                    if text in llm_pred_by_text:
+                        n_llm_mapped += 1
+                        if llm_pred_by_text[text]:
+                            llm_hit = True
+                    else:
+                        n_llm_unmapped += 1
+            fired_rule_or_llm = fired_rule or llm_hit
             rows.append({
                 "id": t.id,
                 "asset": t.asset_name,
@@ -389,6 +405,10 @@ def eval_retrospective(manifest, templates, as_of_offset_days=2):
                 "was_late": gold_late,
                 "fired_rule": fired_rule,
                 "fired_rule_or_keyword": fired_any,
+                "fired_rule_or_llm": fired_rule_or_llm,
+                "llm_comment_hit": llm_hit,
+                "n_llm_mapped": n_llm_mapped,
+                "n_llm_unmapped": n_llm_unmapped,
                 "rule_kinds": [c.kind for c in cards],
                 "n_comments_then": len(t.comments),
                 "duration_then_days": t.duration_days(tmpl.hours_per_day),
@@ -407,60 +427,27 @@ def eval_retrospective(manifest, templates, as_of_offset_days=2):
         "ground_truth": "was_late = done_date > due_date（生成时写入，来自实际完成日与截止日，不是规则输出）。",
         "rule_only": summarize("fired_rule"),
         "rule_or_keyword": summarize("fired_rule_or_keyword"),
+        "rule_or_llm": summarize("fired_rule_or_llm") if llm_pred_by_text else None,
+        "llm_comment_coverage": {
+            "n_comments_mapped": sum(r.get("n_llm_mapped", 0) for r in rows),
+            "n_comments_unmapped": sum(r.get("n_llm_unmapped", 0) for r in rows),
+            "note": (
+                "回顾式 LLM 判断复用金标评测里按评论原文缓存的产物，不再额外调用。"
+                "未命中缓存的评论不视为阻塞（保守），并在 unmapped 中计数。"
+            ) if llm_pred_by_text else "未接入 LLM。",
+        },
         "late_rate": (sum(1 for r in rows if r["was_late"]) / len(rows)) if rows else None,
         "rows": rows,
     }
 
 
-def eval_comments(manifest, llm_extractions=None, llm_ran=False):
-    gold = []
-    for block in manifest["projects"].values():
-        for tp in block["tasks"]:
-            for c in tp.get("comments") or []:
-                if c.get("gold_label") in {"blocker", "sarcasm", "misleading", "normal"}:
-                    gold.append({
-                        "task_id": tp.get("kitsu_task_id"),
-                        "asset": tp["asset_name"],
-                        "text": c["text"],
-                        "label": c["gold_label"],
-                        "reason": c.get("gold_blocker_reason"),
-                        "scenario": tp.get("scenario"),
-                    })
-    comments = [Comment(id=str(i), task_id=g["task_id"] or "", text=g["text"], gold_label=g["label"], gold_blocker_reason=g["reason"]) for i, g in enumerate(gold)]
-    kw = keyword_extract(comments)
-    kw_ids = {int(e.comment_id) for e in kw if e.is_blocker}
-    tp = fp = fn = tn = 0
-    fps = []
-    fns = []
-    tps = []
-    for i, g in enumerate(gold):
-        pred = i in kw_ids
-        truth = g["label"] == "blocker"
-        if truth and pred:
-            tp += 1
-            tps.append(g)
-        elif pred and not truth:
-            fp += 1
-            fps.append(g)
-        elif truth and not pred:
-            fn += 1
-            fns.append(g)
-        else:
-            tn += 1
-    out = {
-        "n_labeled": len(gold),
-        "by_label": {lab: sum(1 for g in gold if g["label"] == lab) for lab in ("blocker", "sarcasm", "misleading", "normal")},
-        "keyword_baseline": pr(tp, fp, fn, tn),
-        "keyword_fps": fps[:20],
-        "keyword_fns": fns[:20],
-        "note": "关键词基线，不是 LLM。反话和「上次重做」是预期误报来源。",
-    }
-    if llm_ran and llm_extractions is not None:
-        out["llm"] = {"note": "真实模型已运行，见下方。", "n": len(llm_extractions)}
-        # would compute if we had mapping — optional
-    else:
-        out["llm"] = {"ran": False, "note": "未调用真实 LLM，不报告模型忠实度 / 幻觉率。"}
-    return out
+def eval_comments(manifest, llm_extractions=None, llm_ran=False, llm_usage=None):
+    return evaluate_comments(
+        manifest,
+        llm_extractions=llm_extractions,
+        llm_ran=llm_ran,
+        llm_usage=llm_usage,
+    )
 
 
 def fmt(x, digits=4):
@@ -477,6 +464,7 @@ def write_reports(est, open_intent, retro, comments, scan_latency, settings, llm
         "platform": platform.platform(),
         "as_of": settings.as_of,
         "llm_backend": llm_usage.get("backend") if llm_usage else "disabled",
+        "llm_model": (llm_usage or {}).get("model") or "",
     }
     lines = []
     a = lines.append
@@ -541,9 +529,16 @@ def write_reports(est, open_intent, retro, comments, scan_latency, settings, llm
     a("")
     a("| 预测定义 | Precision | Recall | F1 | TP | FP | FN | TN |")
     a("| --- | --- | --- | --- | --- | --- | --- | --- |")
-    for name, key in [("仅规则层", "rule_only"), ("规则层或关键词", "rule_or_keyword")]:
+    rows_to_print = [("仅规则层", "rule_only"), ("规则层或关键词", "rule_or_keyword")]
+    if retro.get("rule_or_llm"):
+        rows_to_print.append(("规则层或 LLM（护栏后输出）", "rule_or_llm"))
+    for name, key in rows_to_print:
         v = retro[key]
         a(f"| {name} | {fmt(v['precision'])} | {fmt(v['recall'])} | {fmt(v['f1'])} | {v['tp']} | {v['fp']} | {v['fn']} | {v['tn']} |")
+    if retro.get("llm_comment_coverage"):
+        cov = retro["llm_comment_coverage"]
+        a("")
+        a(f"- 回顾式评论 LLM 覆盖：已映射 {cov.get('n_comments_mapped')} 条，未映射 {cov.get('n_comments_unmapped')} 条。{cov.get('note','')}")
     a("")
     a("误报（被标风险但按期完成）比例 = FP / (FP+TN)，用于谈告警疲劳：")
     v = retro["rule_only"]
@@ -554,18 +549,87 @@ def write_reports(est, open_intent, retro, comments, scan_latency, settings, llm
     a("## 3. 评论解读")
     a("")
     a(f"有金标的自然语言评论 {comments['n_labeled']} 条（不含纯状态流转）。分布：{comments['by_label']}。")
+    a("金标集合与 v1 相同，一道未改。")
     a("")
     kw = comments["keyword_baseline"]
-    a("### 关键词基线（确定性，不是 LLM）")
+    llm = comments.get("llm") or {}
+    a("### 对照表（正向类 = 金标 blocker）")
     a("")
-    a(f"- Precision={fmt(kw['precision'])}，Recall={fmt(kw['recall'])}，F1={fmt(kw['f1'])}（TP={kw['tp']} FP={kw['fp']} FN={kw['fn']} TN={kw['tn']}）。")
-    a(f"- {comments['note']}")
+    a("| 方法 | Precision | Recall | F1 | TP | FP | FN | TN |")
+    a("| --- | --- | --- | --- | --- | --- | --- | --- |")
+
+    def _row(name, m):
+        if not m:
+            return
+        a(f"| {name} | {fmt(m.get('precision'))} | {fmt(m.get('recall'))} | {fmt(m.get('f1'))} | {m.get('tp')} | {m.get('fp')} | {m.get('fn')} | {m.get('tn')} |")
+
+    _row("关键词基线（确定性，不是 LLM）", kw)
+    if llm.get("ran"):
+        _row("LLM 产品输出（护栏后，失败回退关键词）", llm.get("product"))
+        raw = llm.get("raw") or {}
+        _row(f"LLM 原始 is_blocker（仅解析成功 n={llm.get('raw_n')}）", raw)
     a("")
+    a(f"- 关键词说明：{comments['note']}")
+    a("")
+
+    a("### 按金标类别")
+    a("")
+    a("模型只输出二分类 is_blocker，不是四分类。blocker 行是该类上的召回（及总体精确率）；")
+    a("sarcasm / misleading / normal 三行报告的是「正确判成非阻塞」的比例（特异度），以及该类上的误报数。")
+    a("")
+
+    def _cat_table(title, cats):
+        a(f"#### {title}")
+        a("")
+        a("| 金标类别 | n | 判为阻塞 | Precision | Recall / 特异度 | F1 | 准确率 |")
+        a("| --- | --- | --- | --- | --- | --- | --- |")
+        for lab in ("blocker", "sarcasm", "misleading", "normal"):
+            c = (cats or {}).get(lab) or {}
+            rec = c.get("recall") if lab == "blocker" else c.get("specificity", c.get("recall"))
+            a(f"| {lab} | {c.get('n')} | {c.get('n_pred_blocker')} | {fmt(c.get('precision'))} | {fmt(rec)} | {fmt(c.get('f1'))} | {fmt(c.get('accuracy'))} |")
+        a("")
+
+    _cat_table("关键词基线", comments.get("keyword_per_category"))
+    if llm.get("ran"):
+        _cat_table("LLM 产品输出", llm.get("product_per_category"))
+
     a("### LLM")
     a("")
-    a(comments["llm"]["note"] if isinstance(comments["llm"], dict) else str(comments["llm"]))
-    if not comments["llm"].get("ran", True) if isinstance(comments.get("llm"), dict) else True:
+    if not llm.get("ran"):
+        a(llm.get("note") or "未调用真实 LLM，不报告模型忠实度 / 幻觉率。")
         a("简历里评论抽取幻觉率保持占位，不得用关键词数字冒充。")
+        a("")
+    else:
+        usage = llm.get("usage") or llm_usage or {}
+        a(f"- 模型 id：`{usage.get('model') or '（见 usage）'}`，backend={usage.get('backend')}。")
+        a(f"- {llm.get('note','')}")
+        a(f"- 调用 {usage.get('n_calls')} 次，解析成功（n_ok）{usage.get('n_ok')}，"
+          f"API 失败 {usage.get('n_api_fail')}，解析失败 {usage.get('n_parse_fail')}，"
+          f"回退关键词 {usage.get('n_fallback')}。"
+          f"回退率 {fmt(usage.get('fallback_rate'))}，失败率 {fmt(usage.get('failure_rate'))}。")
+        a(f"- 时延（单条，含重试）：P50={fmt(usage.get('latency_p50_ms'), 1)} ms，"
+          f"P95={fmt(usage.get('latency_p95_ms'), 1)} ms，合计 {fmt(usage.get('total_ms'), 1)} ms。")
+        a(f"- Token：prompt={usage.get('prompt_tokens')}，completion={usage.get('completion_tokens')}，"
+          f"cache_hit={usage.get('cache_hit_tokens')}，合计 {usage.get('total_tokens')}。")
+        cny = usage.get("estimated_cny")
+        a(f"- 估算费用：{fmt(cny, 6) if cny is not None else '—'} 元人民币。"
+          f"{usage.get('price_note') or ''}")
+        hall = llm.get("hallucination") or {}
+        a("")
+        a("#### 幻觉（脚本按定义实测，作用在原始 JSON 上）")
+        a("")
+        a(hall.get("definition") or "")
+        a("")
+        a(f"- 解析成功 {hall.get('n_parsed')} 条中，{hall.get('n_flagged')} 条带至少一项幻觉标记，"
+          f"幻觉率 {fmt(hall.get('rate'))}。标记计数：{hall.get('flag_counts')}。")
+        a(f"- 护栏之后仍作为阻塞展示且带标记的：{hall.get('n_visible_blocker_flagged')} 条"
+          f"（占解析成功 {fmt(hall.get('visible_rate_over_parsed'))}）。"
+          "对不齐原文的阻塞在产品路径会被抑制，所以可见率可以低于原始率。")
+        a("")
+        fb = llm.get("fallback") or {}
+        a(f"- 评测集上回退 {fb.get('n')} 条，回退率 {fmt(fb.get('rate'))}。")
+        a("")
+
     a("")
 
     a("## 4. 写回护栏")
@@ -575,7 +639,7 @@ def write_reports(est, open_intent, retro, comments, scan_latency, settings, llm
 
     a("## 5. 扫描时延与费用")
     a("")
-    a(f"- 两个项目规则+关键词扫描时延见下表（毫秒）。LLM 未运行时 llm 时延接近 0，费用为 0。")
+    a("- 两个项目规则+关键词扫描时延见下表（毫秒）。本表的扫描固定走 DisabledLLM，与 v1 口径一致，不含评论模型调用。评论 LLM 的时延和费用见第 3 节。")
     a("")
     a("| 项目 | 任务数 | 规则 ms | 关键词 ms | LLM ms | 合计 ms |")
     a("| --- | --- | --- | --- | --- | --- |")
@@ -584,7 +648,10 @@ def write_reports(est, open_intent, retro, comments, scan_latency, settings, llm
         a(f"| {row['project']} | {row['n_tasks']} | {lm['rule']} | {lm['keyword']} | {lm['llm']} | {lm['total']} |")
     a("")
     if llm_usage and llm_usage.get("n_calls", 0) > 0:
-        a(f"- LLM 用量：{llm_usage}")
+        a(f"- 评论 LLM 用量摘要：model={llm_usage.get('model')}，"
+          f"n_calls={llm_usage.get('n_calls')}，tokens={llm_usage.get('total_tokens')}，"
+          f"estimated_cny={llm_usage.get('estimated_cny')}。"
+          f"{llm_usage.get('price_note') or ''}")
     else:
         a("- **未调用真实 LLM，token 费用为 0。** 不要把假设单价写成实测账单。")
     a("")
@@ -593,7 +660,7 @@ def write_reports(est, open_intent, retro, comments, scan_latency, settings, llm
     a("")
     a(f"- Python {env['python']}，{env['platform']}。")
     a(f"- 评测 as_of = {env['as_of']}（写死，不用墙钟）。")
-    a(f"- LLM backend = {env['llm_backend']}。")
+    a(f"- LLM backend = {env['llm_backend']}，model = `{env.get('llm_model') or '（未调用）'}`。")
     a("")
 
     a("## 7. 限制（必须和数字一起讲）")
@@ -603,6 +670,10 @@ def write_reports(est, open_intent, retro, comments, scan_latency, settings, llm
     a("- 回顾式评测更有意义，但「到期前 2 天」的工时是按日志重建的，仍来自同一生成器，独立性有限。")
     a("- 没有真实制片访谈，阈值是方案里的初始值，不是用户校准过的。")
     a("- 这不是腾讯或任何游戏工作室的生产系统。")
+    a("- 评论金标由生成器按模板写就，关键词召回=1 被用词抬高，不能外推到真实评审用语。")
+    a("- 幻觉定义是保守的：正当改述不记为幻觉；若 reason 编造了原文没有的数字或虚构引语，才会被标记。")
+    a("- 费用是按 API 返回的 token 与硅基流动官网价格页标价估算的，不是账单原件；标价会变动。")
+    a("- 同义词式的「见过坏例再写规则」风险不适用于本评测（金标在 v1 已冻结，本轮未改题，也未根据本轮坏例改提示词）。")
     a("")
 
     (EVAL / "results.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -698,6 +769,48 @@ def write_reports(est, open_intent, retro, comments, scan_latency, settings, llm
     b.append("本项目日期不经过模型：写回只走确认令牌，估时只走检索。没有「模型编了一个日期」的运行样本，")
     b.append("因为产品路径上就不让模型填日期。这是设计，会在面试里主动讲。")
     b.append("")
+    llm = comments.get("llm") or {}
+    if llm.get("ran"):
+        b.append("## 9. LLM 评论解读坏例（同一套 149 条金标，题面未改）")
+        b.append("")
+        b.append(f"模型 `{ (llm.get('usage') or {}).get('model') }`。下面是产品输出（护栏之后）相对金标的误报和漏报，以及原始输出上的幻觉标记。")
+        b.append("")
+        b.append("### 9.1 误报（产品输出判为阻塞，金标不是 blocker）")
+        b.append("")
+        fps = llm.get("product_fps") or []
+        if not fps:
+            b.append("无。")
+        for g in fps[:15]:
+            b.append(
+                f"- **{g.get('label')}** `{g.get('asset')}`：{g.get('text')}"
+                f" ｜ reason={g.get('raw_reason')!r} citation={g.get('citation')!r}"
+                f" flags={g.get('flags')} fallback={g.get('fallback')}"
+            )
+        b.append("")
+        b.append("### 9.2 漏报（金标是 blocker，产品输出未报）")
+        b.append("")
+        fns = llm.get("product_fns") or []
+        if not fns:
+            b.append("无。")
+        for g in fns[:15]:
+            b.append(
+                f"- `{g.get('asset')}`：{g.get('text')}"
+                f" ｜ raw_is_blocker={g.get('raw_is_blocker')} reason={g.get('raw_reason')!r}"
+                f" flags={g.get('flags')} fallback={g.get('fallback')}"
+            )
+        b.append("")
+        b.append("### 9.3 幻觉标记（原始 JSON，护栏之前）")
+        b.append("")
+        hall = (llm.get("hallucination") or {}).get("examples") or []
+        if not hall:
+            b.append("本轮解析成功的输出没有触发幻觉标记。")
+        for g in hall[:15]:
+            b.append(
+                f"- **{g.get('label')}** flags={g.get('flags')} 原文：{g.get('text')}"
+                f" ｜ raw_is_blocker={g.get('raw_is_blocker')} citation={g.get('raw_citation')!r}"
+                f" reason={g.get('raw_reason')!r} product_is_blocker={g.get('product_is_blocker')}"
+            )
+        b.append("")
     (EVAL / "badcases.md").write_text("\n".join(b) + "\n", encoding="utf-8")
     print("wrote", EVAL / "results.md", "and", EVAL / "badcases.md")
 
@@ -710,15 +823,29 @@ def main():
     print("estimate MAPE median", est["overall_median"])
     open_intent = eval_open_intent(tasks, templates, manifest, as_date(settings.as_of))
     print("open intent", {k: v for k, v in open_intent["by_kind"].items()})
-    retro = eval_retrospective(manifest, templates)
-    print("retrospective", retro["rule_only"])
     llm = resolve_backend(settings)
-    usage = llm.usage().to_dict()
-    llm_ran = usage.get("n_calls", 0) > 0
-    comments = eval_comments(manifest, llm_ran=llm_ran)
+    gold_meta, gold_comments = load_gold_comments(manifest)
+    print(f"gold comments {len(gold_comments)}; llm backend={llm.name} model={getattr(llm, 'model', '')}")
+    llm_extractions = None
+    if llm.name != "disabled":
+        llm_extractions = llm.extract(gold_comments)
+        usage = llm.usage().to_dict()
+        print("LLM usage", usage)
+        comments = eval_comments(manifest, llm_extractions=llm_extractions, llm_ran=True, llm_usage=usage)
+        pred_by_text = {c.text: bool(e.is_blocker) for c, e in zip(gold_comments, llm_extractions)}
+        retro = eval_retrospective(manifest, templates, llm_pred_by_text=pred_by_text)
+    else:
+        usage = llm.usage().to_dict()
+        comments = eval_comments(manifest, llm_ran=False)
+        retro = eval_retrospective(manifest, templates)
+    print("retrospective", retro["rule_only"], "rule_or_llm", retro.get("rule_or_llm"))
     print("comments keyword", comments["keyword_baseline"])
+    if comments.get("llm", {}).get("ran"):
+        print("comments llm product", comments["llm"].get("product"))
+        h = comments["llm"].get("hallucination") or {}
+        print("hallucination", h.get("rate"), h.get("flag_counts"))
 
-    # latency: scan each project from snapshot
+    # latency: scan each project from snapshot — DisabledLLM, comparable to v1.
     from collections import defaultdict
     by_proj = defaultdict(list)
     for t in tasks:
@@ -727,7 +854,7 @@ def main():
     for pname, pts in by_proj.items():
         tmpl = _tmpl_for(pts[0], templates)
         t0 = time.perf_counter()
-        result = scan_tasks(pts, tmpl, settings.as_of, llm=llm, project_name=pname, shadow=True)
+        result = scan_tasks(pts, tmpl, settings.as_of, llm=DisabledLLM(), project_name=pname, shadow=True)
         scan_latency.append({
             "project": pname,
             "n_tasks": result.n_tasks,

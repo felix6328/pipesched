@@ -14,13 +14,16 @@ estimate:
   schedule_stat: p75
 
 llm:
-  # auto: 环境里有 OPENAI_API_KEY（或 PIPESCHED_API_KEY）就走 OpenAI 兼容接口，
-  # 否则 disabled。规则层与关键词基线不依赖此项。
+  # auto: 若 .env.local 里有 SILICONFLOW_API_KEY（只读这一行，见 pipesched/envload.py），
+  # 则走硅基流动官方 OpenAI 兼容接口。不要使用 DEEPSEEK_*（第三方中转）。
+  # 密钥不得写入本文件、日志或评测结果。规则层与关键词基线不依赖此项。
   backend: auto
-  base_url: "${OPENAI_BASE_URL}"
-  model: "${OPENAI_MODEL}"
-  api_key: "${OPENAI_API_KEY}"
-  timeout_seconds: 30
+  base_url: "https://api.siliconflow.cn/v1"
+  model: "deepseek-ai/DeepSeek-V3.2"
+  # 不要在这里填 api_key。
+  timeout_seconds: 45
+  max_tokens: 256
+  concurrency: 6
   max_comment_chars: 400
 
 app:

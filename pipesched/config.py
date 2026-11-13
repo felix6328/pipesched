@@ -160,17 +160,19 @@ class Settings:
     llm_backend: str
     llm_base_url: str
     llm_model: str
-    llm_api_key: str
+    llm_api_key: str = field(repr=False)
     llm_timeout: int
     max_comment_chars: int
     app_host: str
     app_port: int
     template_paths: dict
+    llm_max_tokens: int = 256
+    llm_concurrency: int = 6
     raw: dict = field(default_factory=dict, repr=False)
 
     @property
     def llm_enabled_by_config(self) -> bool:
-        return self.llm_backend in {"auto", "openai", "openai_compat"}
+        return self.llm_backend in {"auto", "openai", "openai_compat", "siliconflow", "llm"}
 
 
 def load_settings(path: Path | str = SETTINGS) -> Settings:
@@ -183,8 +185,33 @@ def load_settings(path: Path | str = SETTINGS) -> Settings:
     host = os.environ.get("PIPESCHED_KITSU_HOST") or kitsu.get("host")
     email = os.environ.get("PIPESCHED_KITSU_EMAIL") or kitsu.get("email")
     password = os.environ.get("PIPESCHED_KITSU_PASSWORD") or kitsu.get("password")
-    api_key = os.environ.get("PIPESCHED_API_KEY") or os.environ.get("OPENAI_API_KEY") or llm.get("api_key") or ""
+    # SiliconFlow key is loaded from a single line of .env.local. We never
+    # load_dotenv() the rest of that file (it holds unrelated secrets) and we
+    # never use DEEPSEEK_* (third-party relay). The key itself is not logged.
+    from pipesched.envload import (
+        DEFAULT_MODEL,
+        SILICONFLOW_BASE_URL,
+        load_siliconflow_api_key,
+    )
+    sf_key = load_siliconflow_api_key()
+    # If a SiliconFlow key is present it wins; do not fall through to a proxy.
+    yaml_key = llm.get("api_key") or ""
+    if isinstance(yaml_key, str) and yaml_key.startswith("${"):
+        yaml_key = ""
+    api_key = sf_key or os.environ.get("PIPESCHED_API_KEY") or os.environ.get("OPENAI_API_KEY") or yaml_key or ""
     backend = os.environ.get("PIPESCHED_LLM_BACKEND") or llm.get("backend") or "auto"
+    yaml_model = llm.get("model") or ""
+    if isinstance(yaml_model, str) and (not yaml_model or yaml_model.startswith("${")):
+        yaml_model = ""
+    yaml_base = llm.get("base_url") or ""
+    if isinstance(yaml_base, str) and (not yaml_base or yaml_base.startswith("${")):
+        yaml_base = ""
+    if sf_key:
+        base_url = SILICONFLOW_BASE_URL
+        model = os.environ.get("PIPESCHED_LLM_MODEL") or yaml_model or DEFAULT_MODEL
+    else:
+        base_url = os.environ.get("OPENAI_BASE_URL") or yaml_base or ""
+        model = os.environ.get("OPENAI_MODEL") or os.environ.get("PIPESCHED_LLM_MODEL") or yaml_model or DEFAULT_MODEL
     return Settings(
         kitsu_host=host,
         kitsu_email=email,
@@ -193,11 +220,13 @@ def load_settings(path: Path | str = SETTINGS) -> Settings:
         min_similar=int(estimate.get("min_similar", 3)),
         schedule_stat=str(estimate.get("schedule_stat", "p75")),
         llm_backend=backend,
-        llm_base_url=os.environ.get("OPENAI_BASE_URL") or llm.get("base_url") or "",
-        llm_model=os.environ.get("OPENAI_MODEL") or llm.get("model") or "gpt-4o-mini",
+        llm_base_url=base_url,
+        llm_model=model,
         llm_api_key=api_key,
-        llm_timeout=int(llm.get("timeout_seconds", 30)),
+        llm_timeout=int(llm.get("timeout_seconds", 45)),
         max_comment_chars=int(llm.get("max_comment_chars", 400)),
+        llm_max_tokens=int(llm.get("max_tokens", 256)),
+        llm_concurrency=int(llm.get("concurrency", 6)),
         app_host=app.get("host", "127.0.0.1"),
         app_port=int(os.environ.get("PIPESCHED_PORT") or app.get("port") or 8879),
         template_paths=raw.get("templates") or {

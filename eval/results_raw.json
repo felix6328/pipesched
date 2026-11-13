@@ -1101,6 +1101,28 @@
       "support_pos": 14,
       "support_neg": 85
     },
+    "rule_or_llm": {
+      "tp": 6,
+      "fp": 17,
+      "fn": 8,
+      "tn": 68,
+      "precision": 0.2608695652173913,
+      "recall": 0.42857142857142855,
+      "f1": 0.3243243243243243,
+      "support_pos": 14,
+      "support_neg": 85
+    },
+    "llm_comment_coverage": {
+      "n_comments_mapped": 39,
+      "n_comments_unmapped": 111,
+      "note": "回顾式 LLM 判断复用金标评测里按评论原文缓存的产物，不再额外调用。未命中缓存的评论不视为阻塞（保守），并在 unmapped 中计数。",
+      "unmapped_are_status": true,
+      "unmapped_texts": [
+        "开始制作。",
+        "评审不通过，第 1 次返修。",
+        "评审不通过，第 2 次返修。"
+      ]
+    },
     "late_rate": 0.1414141414141414
   },
   "retrospective_sample": [
@@ -1116,6 +1138,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 2,
       "duration_then_days": 2.0,
@@ -1134,6 +1160,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 2,
       "duration_then_days": 1.0,
@@ -1152,6 +1182,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 2,
       "duration_then_days": 1.0,
@@ -1170,6 +1204,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 1,
       "duration_then_days": 1.0,
@@ -1188,6 +1226,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 2,
       "duration_then_days": 0.5,
@@ -1206,6 +1248,10 @@
       "was_late": false,
       "fired_rule": true,
       "fired_rule_or_keyword": true,
+      "fired_rule_or_llm": true,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 3,
       "rule_kinds": [
         "high_retake"
       ],
@@ -1226,6 +1272,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 1,
       "duration_then_days": 1.0,
@@ -1244,6 +1294,10 @@
       "was_late": false,
       "fired_rule": true,
       "fired_rule_or_keyword": true,
+      "fired_rule_or_llm": true,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 1,
       "rule_kinds": [
         "overrun"
       ],
@@ -1264,6 +1318,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 1,
       "duration_then_days": 2.0,
@@ -1282,6 +1340,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 2,
       "duration_then_days": 2.0,
@@ -1300,6 +1362,10 @@
       "was_late": true,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 1,
       "duration_then_days": 1.0,
@@ -1318,6 +1384,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 1,
       "duration_then_days": 1.0,
@@ -1336,6 +1406,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 1,
       "duration_then_days": 1.0,
@@ -1354,6 +1428,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 1,
       "duration_then_days": 2.0,
@@ -1372,6 +1450,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 2,
       "duration_then_days": 1.0,
@@ -1390,6 +1472,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 2,
       "duration_then_days": 2.0,
@@ -1408,6 +1494,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 2,
       "duration_then_days": 1.0,
@@ -1426,6 +1516,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 1,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 2,
       "duration_then_days": 2.5,
@@ -1444,6 +1538,10 @@
       "was_late": false,
       "fired_rule": false,
       "fired_rule_or_keyword": false,
+      "fired_rule_or_llm": false,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 1,
       "rule_kinds": [],
       "n_comments_then": 1,
       "duration_then_days": 2.0,
@@ -1462,6 +1560,10 @@
       "was_late": false,
       "fired_rule": true,
       "fired_rule_or_keyword": true,
+      "fired_rule_or_llm": true,
+      "llm_comment_hit": false,
+      "n_llm_mapped": 0,
+      "n_llm_unmapped": 2,
       "rule_kinds": [
         "high_retake"
       ],
@@ -1487,14 +1589,318 @@
       "precision": 0.5217391304347826,
       "recall": 1.0,
       "f1": 0.6857142857142856,
-      "support_pos": 36,
-      "support_neg": 113
+      "n": 149
     },
-    "note": "关键词基线，不是 LLM。反话和「上次重做」是预期误报来源。",
+    "keyword_per_category": {
+      "blocker": {
+        "tp": 36,
+        "fp": 33,
+        "fn": 0,
+        "tn": 80,
+        "precision": 0.5217391304347826,
+        "recall": 1.0,
+        "f1": 0.6857142857142856,
+        "n": 36,
+        "accuracy": 1.0,
+        "n_pred_blocker": 36
+      },
+      "sarcasm": {
+        "tp": 5,
+        "fp": 13,
+        "fn": 0,
+        "tn": 0,
+        "precision": 0.2777777777777778,
+        "recall": 0.2777777777777778,
+        "f1": 0.2777777777777778,
+        "n": 18,
+        "accuracy": 0.2777777777777778,
+        "specificity": 0.2777777777777778,
+        "false_positive_rate": 0.7222222222222222,
+        "n_pred_blocker": 13
+      },
+      "misleading": {
+        "tp": 0,
+        "fp": 20,
+        "fn": 0,
+        "tn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "n": 20,
+        "accuracy": 0.0,
+        "specificity": 0.0,
+        "false_positive_rate": 1.0,
+        "n_pred_blocker": 20
+      },
+      "normal": {
+        "tp": 75,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "n": 75,
+        "accuracy": 1.0,
+        "specificity": 1.0,
+        "false_positive_rate": 0.0,
+        "n_pred_blocker": 0
+      }
+    },
+    "note": "关键词基线，不是 LLM。反话和「上次重做」是预期误报来源。召回=1 被生成用词抬高。",
     "llm": {
-      "ran": false,
-      "note": "未调用真实 LLM，不报告模型忠实度 / 幻觉率。"
-    }
+      "ran": true,
+      "n_extractions": 149,
+      "n_missing": 0,
+      "product": {
+        "tp": 36,
+        "fp": 5,
+        "fn": 0,
+        "tn": 108,
+        "precision": 0.8780487804878049,
+        "recall": 1.0,
+        "f1": 0.9350649350649352,
+        "n": 149
+      },
+      "product_per_category": {
+        "blocker": {
+          "tp": 36,
+          "fp": 5,
+          "fn": 0,
+          "tn": 108,
+          "precision": 0.8780487804878049,
+          "recall": 1.0,
+          "f1": 0.9350649350649352,
+          "n": 36,
+          "accuracy": 1.0,
+          "n_pred_blocker": 36
+        },
+        "sarcasm": {
+          "tp": 18,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "n": 18,
+          "accuracy": 1.0,
+          "specificity": 1.0,
+          "false_positive_rate": 0.0,
+          "n_pred_blocker": 0
+        },
+        "misleading": {
+          "tp": 20,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "n": 20,
+          "accuracy": 1.0,
+          "specificity": 1.0,
+          "false_positive_rate": 0.0,
+          "n_pred_blocker": 0
+        },
+        "normal": {
+          "tp": 70,
+          "fp": 5,
+          "fn": 0,
+          "tn": 0,
+          "precision": 0.9333333333333333,
+          "recall": 0.9333333333333333,
+          "f1": 0.9333333333333333,
+          "n": 75,
+          "accuracy": 0.9333333333333333,
+          "specificity": 0.9333333333333333,
+          "false_positive_rate": 0.06666666666666667,
+          "n_pred_blocker": 5
+        }
+      },
+      "raw": {
+        "tp": 36,
+        "fp": 5,
+        "fn": 0,
+        "tn": 108,
+        "precision": 0.8780487804878049,
+        "recall": 1.0,
+        "f1": 0.9350649350649352,
+        "n": 149
+      },
+      "raw_n": 149,
+      "raw_per_category": {
+        "blocker": {
+          "tp": 36,
+          "fp": 5,
+          "fn": 0,
+          "tn": 108,
+          "precision": 0.8780487804878049,
+          "recall": 1.0,
+          "f1": 0.9350649350649352,
+          "n": 36,
+          "accuracy": 1.0,
+          "n_pred_blocker": 36
+        },
+        "sarcasm": {
+          "tp": 18,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "n": 18,
+          "accuracy": 1.0,
+          "specificity": 1.0,
+          "false_positive_rate": 0.0,
+          "n_pred_blocker": 0
+        },
+        "misleading": {
+          "tp": 20,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "n": 20,
+          "accuracy": 1.0,
+          "specificity": 1.0,
+          "false_positive_rate": 0.0,
+          "n_pred_blocker": 0
+        },
+        "normal": {
+          "tp": 70,
+          "fp": 5,
+          "fn": 0,
+          "tn": 0,
+          "precision": 0.9333333333333333,
+          "recall": 0.9333333333333333,
+          "f1": 0.9333333333333333,
+          "n": 75,
+          "accuracy": 0.9333333333333333,
+          "specificity": 0.9333333333333333,
+          "false_positive_rate": 0.06666666666666667,
+          "n_pred_blocker": 5
+        }
+      },
+      "hallucination": {
+        "definition": "作用于模型原始 JSON（护栏之前）。citation_ungrounded：citation 非空但对不齐原文；blocker_without_grounded_citation：声称阻塞但没有可对齐的引用；reason_invented_number：reason 出现原文没有的阿拉伯数字；reason_invented_quote：reason 里引号中的片段对不齐原文。正当改述（不含数字、不含虚构引语）不记为幻觉。",
+        "n_parsed": 149,
+        "n_flagged": 0,
+        "rate": 0.0,
+        "n_visible_blocker_flagged": 0,
+        "visible_rate_over_parsed": 0.0,
+        "flag_counts": {},
+        "examples": []
+      },
+      "fallback": {
+        "n": 0,
+        "rate": 0.0,
+        "examples": []
+      },
+      "product_fps": [
+        {
+          "task_id": "8a7030e7-c669-4144-a8e7-9e9b00533ebf",
+          "asset": "m_ui_open_shop",
+          "text": "还差切图规范，进度比想的慢。",
+          "label": "normal",
+          "reason": null,
+          "scenario": "open_overdue",
+          "index": 63,
+          "pred": true,
+          "raw_reason": "缺少切图规范",
+          "citation": "还差切图规范",
+          "flags": [],
+          "fallback": false
+        },
+        {
+          "task_id": "bd6434f8-3d73-468e-80d8-f8aac9118336",
+          "asset": "m_prop_open_chest",
+          "text": "细节比估计多，还在抠锁扣。",
+          "label": "normal",
+          "reason": null,
+          "scenario": "open_overrun",
+          "index": 64,
+          "pred": true,
+          "raw_reason": "细节超出预期，仍在制作中",
+          "citation": "细节比估计多，还在抠锁扣。",
+          "flags": [],
+          "fallback": false
+        },
+        {
+          "task_id": "ff8996c1-f694-4689-8f1b-2aed37495c8e",
+          "asset": "m_prop_open_lantern",
+          "text": "按旧稿先做了模型，原画其实还没定。",
+          "label": "normal",
+          "reason": null,
+          "scenario": "open_dep_blocked",
+          "index": 65,
+          "pred": true,
+          "raw_reason": "依赖未完成的前置环节",
+          "citation": "原画其实还没定",
+          "flags": [],
+          "fallback": false
+        },
+        {
+          "task_id": "9b58ed2f-d501-4b86-9511-03f0747cd3ee",
+          "asset": "c_character_overrun",
+          "text": "贴图工作量比估计大。",
+          "label": "normal",
+          "reason": null,
+          "scenario": "open_overrun",
+          "index": 143,
+          "pred": true,
+          "raw_reason": "工作量超出预期",
+          "citation": "贴图工作量比估计大",
+          "flags": [],
+          "fallback": false
+        },
+        {
+          "task_id": "932148bf-7b77-46bb-9a8b-7d7214664f63",
+          "asset": "c_character_dep_block",
+          "text": "先按临时模型绑了，贴图还没过。",
+          "label": "normal",
+          "reason": null,
+          "scenario": "open_dep_blocked",
+          "index": 144,
+          "pred": true,
+          "raw_reason": "贴图未通过",
+          "citation": "贴图还没过",
+          "flags": [],
+          "fallback": false
+        }
+      ],
+      "product_fns": [],
+      "usage": {
+        "backend": "siliconflow",
+        "model": "deepseek-ai/DeepSeek-V3.2",
+        "n_calls": 44,
+        "n_ok": 44,
+        "n_parse_fail": 0,
+        "n_api_fail": 0,
+        "n_fallback": 0,
+        "fallback_rate": 0.0,
+        "failure_rate": 0.0,
+        "prompt_tokens": 10502,
+        "completion_tokens": 1276,
+        "cache_hit_tokens": 0,
+        "total_tokens": 11778,
+        "total_ms": 201063.82,
+        "latency_p50_ms": 3520.53,
+        "latency_p95_ms": 10390.92,
+        "estimated_cny": 0.049664,
+        "price_note": "deepseek-ai/DeepSeek-V3.2 标价 输入¥4.0/M、输出¥6.0/M、缓存命中¥0.4/M；来源 https://www.siliconflow.cn/pricing，查阅日期 2026-11-14（Asia/Shanghai）。此为按返回 token 与标价估算，不是账单原件。",
+        "note": "真实模型调用。费用按 API 返回的 token 与官网标价估算，不是账单原件。"
+      },
+      "note": "product 是护栏之后的对外输出（对不齐原文的阻塞被抑制；API/解析失败回退关键词）。raw 是模型原始 is_blocker，只在解析成功的样本上计算。",
+      "n_unique_texts": 29,
+      "n_http_calls": 44,
+      "duplicate_calls_from_cache_race": 15,
+      "fp_note": "5 FPs all gold=normal with grounded citations; judgment disagreement, not hallucination. sarcasm 18 and misleading 20 all correctly rejected."
+    },
+    "n_unique_texts": 29
   },
   "comments_fps": [
     {
@@ -1503,7 +1909,9 @@
       "text": "建议重做——如果这是三个月前的版本。现在过了。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 19,
+      "pred": true
     },
     {
       "task_id": "2f11be07-4f84-420e-aa8f-86f87c76eb8c",
@@ -1511,7 +1919,9 @@
       "text": "备注：上次重做是因为布线，这次已经修完了。",
       "label": "misleading",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 20,
+      "pred": true
     },
     {
       "task_id": "bb2fe077-896c-45fb-a55b-75be5d61caf7",
@@ -1519,7 +1929,9 @@
       "text": "重做记录见 v3 评论，v4 已通过。",
       "label": "misleading",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 25,
+      "pred": true
     },
     {
       "task_id": "a1cb7f1a-6753-497f-a3e2-c36d115cd1bc",
@@ -1527,7 +1939,9 @@
       "text": "建议重做——如果这是三个月前的版本。现在过了。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 26,
+      "pred": true
     },
     {
       "task_id": "aad1d362-cbaf-44be-8188-04eb5280f31c",
@@ -1535,7 +1949,9 @@
       "text": "备注：上次重做是因为布线，这次已经修完了。",
       "label": "misleading",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 33,
+      "pred": true
     },
     {
       "task_id": "2a72decb-4205-4b3c-a376-69e21eefc4a7",
@@ -1543,7 +1959,9 @@
       "text": "这个重做是上次的，这次拓扑没问题。",
       "label": "misleading",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 39,
+      "pred": true
     },
     {
       "task_id": "5512ea36-9a6b-4fc2-83a0-05e682ccde50",
@@ -1551,7 +1969,9 @@
       "text": "重做记录见 v3 评论，v4 已通过。",
       "label": "misleading",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 40,
+      "pred": true
     },
     {
       "task_id": "a6501256-a653-4645-a480-d5c6857110da",
@@ -1559,7 +1979,9 @@
       "text": "不要重做，保持现状。",
       "label": "misleading",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 43,
+      "pred": true
     },
     {
       "task_id": "d7dd03ad-7507-403a-8e2d-8ac1001c7b9c",
@@ -1567,7 +1989,9 @@
       "text": "又双叒重做？开玩笑的，这次一次过。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 46,
+      "pred": true
     },
     {
       "task_id": "f8581b0f-1fc0-4b9a-b433-56727c699c73",
@@ -1575,7 +1999,9 @@
       "text": "建议重做——如果这是三个月前的版本。现在过了。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 54,
+      "pred": true
     },
     {
       "task_id": "529879aa-5e2c-41be-9102-f67bc9dfd54e",
@@ -1583,7 +2009,9 @@
       "text": "建议重做——如果这是三个月前的版本。现在过了。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 56,
+      "pred": true
     },
     {
       "task_id": "92488959-f0aa-4566-b246-77cae6933a84",
@@ -1591,7 +2019,9 @@
       "text": "又双叒重做？开玩笑的，这次一次过。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 62,
+      "pred": true
     },
     {
       "task_id": "a3775197-4ea3-4afe-bb58-5a782b0aff15",
@@ -1599,7 +2029,9 @@
       "text": "又双叒重做？开玩笑的，这次一次过。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "open_sarcasm"
+      "scenario": "open_sarcasm",
+      "index": 69,
+      "pred": true
     },
     {
       "task_id": "0d6ae0fd-f6f5-40e7-9c47-5dc1da7997d9",
@@ -1607,7 +2039,9 @@
       "text": "这个重做是上次的，这次拓扑没问题。",
       "label": "misleading",
       "reason": null,
-      "scenario": "open_misleading"
+      "scenario": "open_misleading",
+      "index": 70,
+      "pred": true
     },
     {
       "task_id": "c06553a0-cbb0-473f-ac82-0bbe74aa660a",
@@ -1615,7 +2049,9 @@
       "text": "建议重做——如果这是三个月前的版本。现在过了。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 76,
+      "pred": true
     },
     {
       "task_id": "5a8803db-9c12-44b3-be6e-b2bfa10cf571",
@@ -1623,7 +2059,9 @@
       "text": "又双叒重做？开玩笑的，这次一次过。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 78,
+      "pred": true
     },
     {
       "task_id": "abe61885-ce71-4394-a682-120ce27d4266",
@@ -1631,7 +2069,9 @@
       "text": "不要重做，保持现状。",
       "label": "misleading",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 81,
+      "pred": true
     },
     {
       "task_id": "2b10d099-7908-4d8a-bb30-3d32f29cd9ca",
@@ -1639,7 +2079,9 @@
       "text": "不要重做，保持现状。",
       "label": "misleading",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 86,
+      "pred": true
     },
     {
       "task_id": "ccecca13-9f32-453e-a92d-21a36ea20c37",
@@ -1647,7 +2089,9 @@
       "text": "又双叒重做？开玩笑的，这次一次过。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 88,
+      "pred": true
     },
     {
       "task_id": "429cc465-a4cb-442f-a9fe-9ca06e68970a",
@@ -1655,7 +2099,9 @@
       "text": "又一次完美通过（并没有）重做吧重做吧，开玩笑的，这次过了。",
       "label": "sarcasm",
       "reason": null,
-      "scenario": "historical_completed"
+      "scenario": "historical_completed",
+      "index": 92,
+      "pred": true
     }
   ],
   "comments_fns": [],
@@ -1664,65 +2110,77 @@
       "project": "P-Mobile｜风格化手游（模拟）",
       "n_tasks": 136,
       "n_rule_cards": 5,
-      "n_keyword_cards": 30,
+      "n_keyword_cards": 3,
       "latency_ms": {
-        "rule": 0.22,
-        "keyword": 1.14,
+        "rule": 0.4,
+        "keyword": 0.15,
         "llm": 0.0,
-        "total": 1.37
+        "total": 0.56
       }
     },
     {
       "project": "P-Character｜角色全流程（模拟）",
       "n_tasks": 177,
       "n_rule_cards": 5,
-      "n_keyword_cards": 39,
+      "n_keyword_cards": 3,
       "latency_ms": {
-        "rule": 0.27,
-        "keyword": 1.52,
+        "rule": 0.45,
+        "keyword": 0.11,
         "llm": 0.0,
-        "total": 1.79
+        "total": 0.56
       }
     }
   ],
   "llm_usage": {
-    "backend": "disabled",
-    "n_calls": 0,
-    "n_ok": 0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "total_ms": 0.0,
-    "estimated_cny": 0.0,
-    "note": "未调用真实模型，不得填写 LLM 评测数字。"
+    "backend": "siliconflow",
+    "model": "deepseek-ai/DeepSeek-V3.2",
+    "n_calls": 44,
+    "n_ok": 44,
+    "n_parse_fail": 0,
+    "n_api_fail": 0,
+    "n_fallback": 0,
+    "fallback_rate": 0.0,
+    "failure_rate": 0.0,
+    "prompt_tokens": 10502,
+    "completion_tokens": 1276,
+    "cache_hit_tokens": 0,
+    "total_tokens": 11778,
+    "total_ms": 201063.82,
+    "latency_p50_ms": 3520.53,
+    "latency_p95_ms": 10390.92,
+    "estimated_cny": 0.049664,
+    "price_note": "deepseek-ai/DeepSeek-V3.2 标价 输入¥4.0/M、输出¥6.0/M、缓存命中¥0.4/M；来源 https://www.siliconflow.cn/pricing，查阅日期 2026-11-14（Asia/Shanghai）。此为按返回 token 与标价估算，不是账单原件。",
+    "note": "真实模型调用。费用按 API 返回的 token 与官网标价估算，不是账单原件。"
   },
   "env": {
     "python": "3.13.5",
     "platform": "Linux-6.12.113+-x86_64-with-glibc2.41",
     "as_of": "2026-11-13",
-    "llm_backend": "disabled"
+    "llm_backend": "siliconflow",
+    "llm_model": "deepseek-ai/DeepSeek-V3.2"
   },
   "live_latency": {
     "rows": [
       {
         "project": "P-Mobile｜风格化手游（模拟）",
         "n_tasks": 136,
-        "gazu_load_ms": 76.79,
-        "rule_scan_ms": 0.25,
-        "keyword_ms": 1.28,
-        "total_ms": 78.32,
+        "gazu_load_ms": 188.49,
+        "rule_scan_ms": 0.41,
+        "keyword_ms": 0.16,
+        "total_ms": 189.05,
         "n_rule_cards": 5
       },
       {
         "project": "P-Character｜角色全流程（模拟）",
         "n_tasks": 177,
-        "gazu_load_ms": 72.99,
+        "gazu_load_ms": 98.51,
         "rule_scan_ms": 0.42,
-        "keyword_ms": 1.9,
-        "total_ms": 75.31,
+        "keyword_ms": 0.13,
+        "total_ms": 99.06,
         "n_rule_cards": 5
       }
     ],
-    "total_ms": 423.44,
+    "total_ms": 775.41,
     "note": "含本地 Docker 里 Zou API 的往返，不含 LLM。"
   }
 }

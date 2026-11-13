@@ -85,3 +85,25 @@
 本项目日期不经过模型：写回只走确认令牌，估时只走检索。没有「模型编了一个日期」的运行样本，
 因为产品路径上就不让模型填日期。这是设计，会在面试里主动讲。
 
+## 9. LLM 评论解读坏例（同一套 149 条金标，题面未改）
+
+模型 `deepseek-ai/DeepSeek-V3.2`。下面是产品输出（护栏之后）相对金标的误报和漏报，以及原始输出上的幻觉标记。
+
+### 9.1 误报（产品输出判为阻塞，金标不是 blocker）
+
+5 条全部是金标 `normal`。引用都对齐原文，不是幻觉；模型把进度受阻的描述读成了「当前阻塞」。这是定义分歧，没有为刷分改金标。
+
+- **normal** `m_ui_open_shop`：还差切图规范，进度比想的慢。 ｜ reason='缺少切图规范' citation='还差切图规范' flags=[] fallback=False
+- **normal** `m_prop_open_chest`：细节比估计多，还在抠锁扣。 ｜ reason='细节超出预期，仍在制作中' citation='细节比估计多，还在抠锁扣。' flags=[] fallback=False
+- **normal** `m_prop_open_lantern`：按旧稿先做了模型，原画其实还没定。 ｜ reason='依赖未完成的前置环节' citation='原画其实还没定' flags=[] fallback=False
+- **normal** `c_character_overrun`：贴图工作量比估计大。 ｜ reason='工作量超出预期' citation='贴图工作量比估计大' flags=[] fallback=False
+- **normal** `c_character_dep_block`：先按临时模型绑了，贴图还没过。 ｜ reason='贴图未通过' citation='贴图还没过' flags=[] fallback=False
+
+### 9.2 漏报（金标是 blocker，产品输出未报）
+
+无。
+
+### 9.3 幻觉标记（原始 JSON，护栏之前）
+
+本轮解析成功的输出没有触发幻觉标记。
+

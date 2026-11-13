@@ -228,8 +228,19 @@ class BlockerExtraction:
     reason: Optional[str]
     citation_text: str
     citation_ok: bool
-    backend: str  # keyword / llm / disabled
+    backend: str  # keyword / llm / siliconflow / keyword_fallback / disabled
     raw: Optional[str] = None
+    fallback: bool = False
+    failure: Optional[str] = None  # exception type or short code, never a secret
+    raw_is_blocker: Optional[bool] = None
+    raw_citation: str = ""
+    raw_reason: Optional[str] = None
+    raw_parsed_ok: bool = False
+    latency_ms: float = 0.0
+    hallucination_flags: list = field(default_factory=list)
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
+    cache_hit_tokens: int = 0
 
     def to_dict(self) -> dict:
         return asdict(self)

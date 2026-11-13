@@ -1,3 +1,6 @@
+import os
+os.environ.setdefault('PIPESCHED_LLM_BACKEND', 'disabled')
+
 import sys
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
