@@ -17,3 +17,9 @@ data/cost/*.jsonl
 !data/cost/.gitkeep
 .env
 .env.local
+
+# editor
+.idea/
+.vscode/
+.env.*
+!.env.example

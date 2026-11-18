@@ -1,147 +1,185 @@
-# PipeSched｜美术制作排期与进度风险 Agent
+<div align="center">
 
-> **已由 [ieg-artpipe](https://github.com/felix6328/ieg-artpipe) 取代。** 本仓库是早期版本，保留作过程记录；ArtPipe 改用开源游戏 0 A.D. 的真实资产和开发历史做评测，后续更新都在那边。
+# 📅 PipeSched · 美术制作排期与进度风险 Agent
 
-个人项目，为投递「腾讯 IEG｜腾讯游戏管理平台产品实习生」而做。  
-**不是**腾讯或任何游戏项目组的生产系统。两个 Kitsu 项目里的资产、工时、评论全部由固定种子脚本合成，README 和数据清单都标了 `synthetic`。
+*Early prototype: history-based estimates, rule-first delay risk, and confirm-before-writeback on a real Kitsu instance.*
 
-一句话产品观：**能用工具从 Kitsu 字段算死的，不交给模型；模型（若启用）只解读规则写不死的评审备注，并且默认不改档期。写回必须制片确认。换项目只换 YAML 模板，不换 Agent。**
+![Superseded](https://img.shields.io/badge/status-superseded%20by%20ieg--artpipe-red)
+![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)
+![Kitsu](https://img.shields.io/badge/Kitsu%20%2F%20Zou-official%20Docker%20image-blue)
+![Data](https://img.shields.io/badge/data-synthetic%20(seed%2042)-yellow)
+![Writeback](https://img.shields.io/badge/writeback-human%20confirmed-success)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-## 它做什么
+</div>
 
-- **排期建议：** 按模板 DAG 拆工序，用「同任务类型 + 同资产类型」的已完成任务给出中位数和 P75 估时（检索排除自身）。在工作日历（跳过周末）和每周产能约束下输出建议 `start_date` / `due_date`，并标明依据和依赖冲突（冲突标红，不得静默覆盖）。没有足够同类历史时，回退模板默认人天并标低置信。
-- **进度风险：** 规则层先抓逾期、实耗超估、高返修、依赖阻塞、评审 SLA。关键词基线（或可选 LLM）只解读备注里的阻塞原因，必须带回评论 ID 和原文片段。默认影子模式：出卡、记日志，不改任务状态、不自动写回。
-- **平台化：** 引擎一套，规范是 YAML。模板 P-Mobile 模拟风格化手游短管线（原画 → 制作 → 入库检查），模板 P-Character 模拟角色全流程（原画 → 建模 → 贴图 → 绑定 → 动画 → 特效）。阈值、SLA、默认估时、周产能都在模板里。
-- **写回护栏：** 读工具和写工具分离。写 `start_date` / `due_date` 必须有 `confirmed_by` 和一次有效确认令牌，否则代码层拒绝，Kitsu 不被调用，审计照记。
+> [!IMPORTANT]
+> **本仓库已由 [ieg-artpipe](https://github.com/felix6328/ieg-artpipe) 取代**，保留作过程记录。ArtPipe 改用开源游戏 0 A.D. 的真实资产和开发历史做评测。
 
-技术栈：Python 3.13、FastAPI 工作台、官方 Python 客户端 Gazu 1.3.1。制作跟踪底座是官方 Docker 镜像 `cgwire/cgwire:1.0.79`（Kitsu 前端 + Zou API 1.1.2 + Postgres + Redis）。**本仓库不修改 Kitsu / Zou 内核。**
+> [!NOTE]
+> 个人求职作品（方向：腾讯 IEG · 游戏管理平台产品），**不是**腾讯或任何游戏项目组的生产系统，与腾讯无官方关联。两个 Kitsu 项目里的资产、工时、评论全部由固定种子脚本**合成**（`synthetic`）。
 
-## 如何运行
+**产品观：** 能从 Kitsu 字段算死的，不交给模型；模型（若启用）只解读规则写不死的评审备注，并且**默认不改档期**。写回必须制片确认。换项目只换 YAML 模板，不换 Agent。
 
-需要：Python 3.11+（开发时为 3.13.5）、可运行的 Docker（用于官方 Kitsu 镜像）。镜像约 2 GB 磁盘、运行时约 800 MB 内存。
+---
 
-```bash
-git clone <本仓库> pipesched && cd pipesched
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+## 📑 目录
 
-# 1. 拉起官方 Kitsu + Zou（默认端口 8878）
-#    本开发盒子上 Docker Engine 在 tcp://127.0.0.1:2375，脚本会自动设置 DOCKER_HOST。
-#    你自己的机器若已安装 Docker Desktop，通常不需要这个变量。
-chmod +x scripts/*.sh
-./scripts/start_kitsu.sh
-# 浏览器打开 http://127.0.0.1:8878/ ，官方默认账号 admin@example.com / mysecretpassword
-# （见 https://zou.cg-wire.com/ ，不是真实工作室凭据）
+[背景](#-背景) · [功能](#-功能) · [架构](#-架构) · [实测数字](#-实测数字) · [快速开始](#-快速开始) · [目录结构](#-目录结构) · [设计取舍](#-设计取舍) · [局限](#-局限) · [FAQ](#-faq) · [许可](#-许可)
 
-# 2. 灌入两个合成项目（约 1–2 分钟，固定种子 42，可复现）
-export PYTHONPATH=$PWD
-python scripts/seed.py 42
-# 写出 data/gold/manifest.json（生成意图与金标）和 data/gold/snapshot.json（当时的 Kitsu 快照）
+---
 
-# 3. 离线评测（数字写入 eval/results.md 与 eval/badcases.md）
-python eval/measure.py
+## 🧩 背景
 
-# 4. 单元测试（不依赖 Kitsu；含「无确认不得写回」）
-python -m pytest tests/ -q
+| | |
+|---|---|
+| **场景** | 制片给美术任务排期、在评审会前找出会延期的任务 |
+| **痛点** | 估时拍脑袋；阻塞原因埋在评审备注里；自动工具一旦乱改档期就失去信任 |
+| **判断** | 估时用「同任务类型 + 同资产类型」历史；风险规则先行，LLM 只读备注且必须引用原文 |
+| **成本** | 规则 + 关键词扫描毫秒级、零费用；149 条评论的 LLM 解读估算 **¥0.05** |
+| **安全边界** | 影子模式：只出卡不改状态；写 `start_date` / `due_date` 必须有 `confirmed_by` + 一次性令牌，否则代码层拒绝 |
 
-# 5. 打开工作台
-./scripts/run_app.sh    # http://127.0.0.1:8879
+## ✨ 功能
+
+| 模块 | 说明 |
+|---|---|
+| 🗓️ 排期建议 | 按模板 DAG 拆工序，同类历史中位数 / P75 估时（检索排除自身），工作日历 + 周产能约束，依赖冲突标红 |
+| 🚨 进度风险 | 五条字段规则：逾期、实耗超估、高返修、依赖阻塞、评审 SLA；备注解读需带评论 ID 与原文片段 |
+| 🧩 平台化 | 模板 P-Mobile（手游短管线）、P-Character（角色全流程），阈值 / SLA / 默认人天都在 YAML |
+| 🔐 写回护栏 | 读写工具分离；令牌哈希存服务端，恒定时间比较；拒绝时 Kitsu 不被调用，审计照记 |
+
+## 🏗️ 架构
+
+```mermaid
+flowchart LR
+    K[(Kitsu / Zou<br/>官方镜像)] -->|Gazu 只读| E[估时<br/>同类中位数 / P75]
+    K -->|Gazu 只读| R[风险规则<br/>5 条字段比较]
+    K -->|评论| C{备注解读}
+    C -->|默认| KW[关键词基线]
+    C -->|可选| LLM[LLM<br/>引用必须对齐原文]
+    E --> S[排期建议卡]
+    R --> CARD[风险卡<br/>影子模式]
+    KW --> CARD
+    LLM --> CARD
+    S --> W{制片确认?}
+    W -->|confirmed_by + 令牌| K
+    W -->|否| D[拒绝写回 · 记审计]
 ```
 
-已经有一份测完的 `eval/results.md` 和 `eval/badcases.md` 随仓库提供，对应种子 42 的快照。若你重新灌数或改生成器，必须重跑评测，不要混用旧数字。
+## 📊 实测数字
 
-仓库里的 `data/gold/*.json` 是灌数时冻住的快照，评测默认读它，这样即使之后在演示里确认写回改了某条日期，MAPE 也不会被污染。
+> 部署为**真实官方镜像** `cgwire/cgwire:1.0.79`（Zou API 1.1.2），经 API 建 2 个项目、82 个资产、313 条任务。数据为合成。
 
-### 可选：打开真实 LLM
-
-评论解读默认走硅基流动官方 OpenAI 兼容接口。把 **只有** `SILICONFLOW_API_KEY=...` 这一行需要的值放进仓库根目录的 `.env.local`（权限建议 600）。加载器（`pipesched/envload.py`）只解析这一行，不会把文件里其它变量（数据库、JWT 等）读进进程。不要使用 `DEEPSEEK_*`（若来自其它项目，可能指向第三方中转）。`.env.local` 已在 `.gitignore`，不要提交，也不要打进压缩包。
-
-没有 key 时 `llm.backend: auto` 落成 `disabled`：规则扫描和关键词基线仍可用，界面提示「智能解读暂停，规则扫描正常」。**未实际调用模型时，不得填写 LLM 忠实度 / 幻觉率，费用记 0。**
-
-v2 评测使用的模型 id 是 `deepseek-ai/DeepSeek-V3.2`（账号 `GET /v1/models` 可见），写在 `configs/settings.yaml`。temperature=0，JSON 输出，引用必须对齐原文，API 或解析失败则回退关键词基线。
-
-## 本次实测数字（估时与规则复现 v1；评论 LLM 于 2026-11-14，Asia/Shanghai）
-
-部署：**真实官方镜像** `cgwire/cgwire:1.0.79`，Zou API 回报 `{"api":"Zou","version":"1.1.2"}`。不是 mock。Gazu 登录后经 API 建了两个项目、82 个资产、313 条任务（历史已完成 258，另有进行中注入与待排期任务）。
-
-### 估时（主指标）
-
-258 条历史已完成任务按完成日排序，前 70%（180 条，切点 2026-09-28）作检索池，后 30%（78 条）测试；检索排除自身。
+**估时**（258 条已完成任务，按完成日前 70% 作检索池、后 30% 测试）
 
 | 方法 | n | MAPE | 中位绝对误差（人天） |
-| --- | --- | --- | --- |
-| 同类中位数（主指标） | 78 | **0.3527** | 0.4123 |
-| 同类 P75（排期用的保守值） | 78 | 0.5546 | 0.6673 |
+|---|---:|---:|---:|
+| **同类中位数（主指标）** | 78 | **0.3527** | 0.4123 |
+| 同类 P75（排期保守值） | 78 | 0.5546 | 0.6673 |
 | 模板默认（基线） | 78 | 0.4721 | 0.5097 |
-| 消融：只按任务类型、不分资产类型 | 78 | 0.4597 | 0.7303 |
+| 消融：只按任务类型 | 78 | 0.4597 | 0.7303 |
 
-测试集上每条都凑齐至少 3 条同类（覆盖率 1.00），没有回退到模板。
+> [!WARNING]
+> 角色项目中位数 MAPE 0.2292 优于模板 0.5257；但**手游项目 0.4828 差于模板 0.4156**——不能说历史检索全面更好。
 
-**必须一起讲的对照：** 角色项目中位数 MAPE 0.2292，优于模板 0.5257；**手游项目中位数 0.4828，差于模板 0.4156**。整体中位数仍优于模板，但不能说历史检索全面更好。道具建模等单元格上，不分资产类型会把角色的长工时串过来（见 `eval/badcases.md`）。
+**回顾式延期预警**（due 前 2 天重建状态，99 条，延期率 0.1414）
 
-### 风险
+| 方案 | Precision | Recall | F1 |
+|---|---:|---:|---:|
+| 仅规则 | 0.1053 | 0.1429 | 0.1212 |
+| 规则 ∪ 关键词 | 0.2000 | 0.4286 | 0.2727 |
+| **规则 ∪ LLM** | **0.2609** | **0.4286** | **0.3243** |
 
-- 进行中注入样本上，五类规则与生成意图的 Precision / Recall 均为 1.00（各 2 个正例）。**这是一致性检查，存在循环论证，不得当成预测能力。**
-- 回顾式：在 `due_date` 前 2 个日历日重建当时状态，真值是后来 `done_date > due_date`。99 条样本、延期率 0.1414。仅规则层 Precision **0.1053**、Recall **0.1429**、F1 0.1212（TP 2 / FP 17 / FN 12 / TN 68）。误报占负例 17/85=0.20。规则或关键词：Precision 0.2000、Recall 0.4286、F1 0.2727（TP 6 / FP 24 / FN 8 / TN 61）。规则或 LLM：Precision **0.2609**、Recall **0.4286**、F1 0.3243（TP 6 / FP 17 / FN 8 / TN 68）——在规则层之上多抓住 4 个真延期，且没有增加误报（关键词合取则多了 7 条误报）。整体仍然偏低，所以产品继续走影子模式。
-- 写回：单元测试 28 项通过、1 项 live 跳过（未设 `PIPESCHED_LIVE`）；并在真实 Zou 上验证——无令牌时日期不变，带令牌并填写确认人后 `start_date` / `due_date` 被更新。未确认写回为 0。
+整体仍然偏低 → 产品继续走影子模式。
 
-### 评论与 LLM（同一套 149 条金标，题面相对 v1 一道未改）
+**评论解读**（149 条金标：blocker 36 / sarcasm 18 / misleading 20 / normal 75）
 
-- 分布：blocker 36、sarcasm 18、misleading 20、normal 75。149 条对应 29 条不重复原文（合成模板复用同一句）。
-- 关键词基线 Precision 0.5217、Recall 1.0000、F1 0.6857（TP 36 / FP 33 / FN 0 / TN 80）。召回为 1 是因为阻塞句在生成时就用了这些关键词，**不能外推**。33 条假阳性主要是反话和「上次重做」。
-- 真实模型：`deepseek-ai/DeepSeek-V3.2`（硅基流动官方接口）。产品输出（护栏后：引用对不齐则不得作为阻塞；失败回退关键词）Precision **0.8780**、Recall **1.0000**、F1 **0.9351**（TP 36 / FP 5 / FN 0 / TN 108）。原始 `is_blocker` 与产品输出一致（本轮无需护栏抑制，也无回退）。
-- 按金标类别：反话 18 和误导 20 全部正确拒绝（关键词分别误报 13、20）；剩余 5 条误报全是金标 `normal`（如「原画其实还没定」「贴图还没过」），引用对齐原文，是「什么算阻塞」的定义分歧，不是幻觉。没有为刷分改金标或提示词。
-- 幻觉定义（脚本，作用于原始 JSON）：引用对不齐原文、声称阻塞但没有可对齐引用、reason 出现原文没有的阿拉伯数字、reason 里的引语对不齐原文。正当改述不记为幻觉。本轮解析成功 149 条（由 29/44 次调用的结果按原文复制），**幻觉率 0.0000**，可见阻塞上的幻觉 0。定义是保守的，要和数字一起讲。
-- 调用：44 次 HTTP（29 条不重复原文；并发在缓存写入前有 15 次重复请求）。API 失败 0、解析失败 0、回退 0。prompt 10502 + completion 1276 = 11778 token，缓存命中 0。按官网价格页（https://www.siliconflow.cn/pricing ，2026-11-14）输入 ¥4/M、输出 ¥6/M 估算 **¥0.049664**，不是账单原件。单次 P50=3520.53 ms，P95=10390.92 ms——应异步跑，不要堵住工作台。
+| 方案 | Precision | Recall | F1 | 说明 |
+|---|---:|---:|---:|---|
+| 关键词基线 | 0.5217 | 1.0000 | 0.6857 | 召回被生成用词抬高，不能外推 |
+| **DeepSeek-V3.2 + 护栏** | **0.8780** | 1.0000 | **0.9351** | 反话、误导全部正确拒绝；保守定义下幻觉率 0 |
 
-### 时延（规则 + 关键词，不含评论 LLM）
+LLM 单次 P50 3.5 s / P95 10.4 s → 应异步跑；规则扫描离线快照约 0.56 ms。写回：单元测试 28 项通过（1 项 live 跳过），并在真实 Zou 上验证无令牌不改日期。详见 [eval/results.md](eval/results.md) · [eval/badcases.md](eval/badcases.md)。
 
-- 离线快照：P-Mobile 0.56 ms（136 条），P-Character 0.56 ms（177 条）。与 v1 同一口径，数字随机器负载会变。
-- 实时从本地 Zou 经 Gazu 拉取再扫描（v2 复测）：P-Mobile **189.05 ms**（拉取 188.49），P-Character **99.06 ms**（拉取 98.51）。两项目含登录共 775.41 ms。评论 LLM 时延见上一节，不计入本表。
+## 🚀 快速开始
 
-## 许可
+```bash
+git clone https://github.com/felix6328/pipesched.git && cd pipesched
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+export PYTHONPATH=$PWD
 
-本仓库源码 MIT，见 `LICENSE` 与 `NOTICE`。Kitsu / Zou 是 AGPL-3.0，本项目旁路使用官方镜像和 API，**没有修改内核**。Gazu 是 LGPL-3.0，作为库使用。
+python -m pytest tests/ -q        # 不依赖 Kitsu；含「无确认不得写回」
+python eval/measure.py            # 读仓库内冻结快照 data/gold/，离线评测
+```
 
-## 代码导读（面试用：每个模块为什么这样设计）
+<details>
+<summary><b>完整演示：拉起官方 Kitsu → 灌合成数据 → 工作台</b></summary>
 
-仓库根目录的 `pipesched/` 是 Python 包，`app/` 是工作台，`configs/templates/` 是两套管线，`scripts/seed.py` 灌合成数据，`eval/` 是评测。
+```bash
+chmod +x scripts/*.sh
+./scripts/start_kitsu.sh          # 官方 Kitsu + Zou，端口 8878（约 2 GB 镜像）
+# 官方默认演示账号见 https://zou.cg-wire.com/（不是真实凭据）
+python scripts/seed.py 42         # 两个合成项目，固定种子，写出 data/gold/ 快照
+./scripts/run_app.sh              # 工作台 http://127.0.0.1:8879
+```
 
-- **`config.py` / YAML 模板。** 平台化的全部差异（DAG、默认人天、宽限、超估比、返修阈值、SLA、周产能）都在配置里。Agent 代码不出现「如果是手游就……」。面试被问「换一个腾讯项目要改什么」：改模板，并和真实项目组对规范——后半句是实习要做的，目前只做到模拟。
-- **`kitsu_client.py`。** 只通过 Gazu 读写。有意记下 Zou 1.1.2 的实测细节：累计实耗在 `duration`（秒），`task.time_spent` 常为 `null`；评论正文在 `text`；`set_time_spent` 的单位是秒（以实测和官方开发文档为准，不以部分 docstring 的「分钟」为准）。删除项目必须先 `close_project`。这些是对接真实平台时会踩的点，值得主动讲。
-- **`estimate.py`。** 同类 = 任务类型 + 资产类型，排除自身，避免把要预测的那条放进检索池。主指标用中位数；排期默认用 P75 留缓冲（MAPE 会变差，这是取舍）。不足 `min_similar`（默认 3）就回退模板并标低置信，不假装精确到小时。
-- **`risk.py`。** 五条规则全部用字段比较，不调模型。逾期看 `due_date + grace` 与 `as_of`；超估用 `duration/estimation`；依赖用「模板 DAG + 同资产实际状态」。`as_of` 写死为 2026-11-13，评测可复现。
-- **`schedule.py`。** 关键路径式的简单排期，不是 APS。先前序结束，再放进工作日历，周产能满了就顺延。冲突标在建议卡上。
-- **`comments.py` / `llm.py` / `hallucination.py` / `envload.py`。** 关键词是确定性基线，backend 明确标 `keyword`。LLM 走硅基流动 OpenAI 兼容协议：temperature 0、JSON、引用必须对齐原文否则不得作为阻塞；API 或解析失败回退关键词并记失败率。密钥只从 `.env.local` 的 `SILICONFLOW_API_KEY` 一行读取，不进日志、不进评测结果。幻觉按脚本定义在原始 JSON 上计数，与产品护栏后的输出分开报告。
-- **`writeback.py`。** 令牌哈希存在服务端，`confirmed_by` 和令牌缺一不可，错误令牌用恒定时间比较。测试里用 mock writer 证明拒绝时写函数一次都不会被调用；另外在真实 Zou 上跑过一次确认。
-- **`seed.py`。** 生成逻辑写在模块文档里。真实人天均值有意按（资产类型，任务类型）偏离模板：角色建模偏长、道具建模偏短。进行中样本按「意图」注入，意图写在 manifest，不是事后用规则打的。评论含阻塞、反话、误导。本环境 Zou 的邮箱投递性检查因 DNS 被劫持无法新建人员，任务都指派给镜像默认管理员——这是环境限制，要主动说。
-- **`eval/measure.py`。** 两套风险数字必须分开讲：意图对照有循环；回顾式更接近「当时能不能预警」。脚本自己写 `results.md`，禁止手填。
+可选 LLM：在 `.env.local` 中只放 `SILICONFLOW_API_KEY` 一行（加载器只解析这一行）。没有 key 时自动降级为关键词，界面提示「智能解读暂停，规则扫描正常」。
 
-## 已知限制
+</details>
 
-- 数据是合成的，工时分布和延期率是生成器设定的，不能外推到真实项目组。
-- 没有真实制片或 TA 访谈，阈值是方案里的初始值。【待实际访谈后填】
-- 进行中规则 P/R=1 不能当预测能力；回顾式样本仍来自同一生成器，独立性有限。
-- 关键词和 LLM 的召回=1 都被生成用词抬高，不能外推到真实评审用语。LLM 在反话/误导上全部拒绝，但 5 条「normal」进度说明被当成阻塞——这是定义问题，不是幻觉。幻觉率 0 基于保守定义，要一起讲。
-- 本环境不能新建 Kitsu 用户，没有多指派、多技能产能的真实味道。不做多人 APS。
-- 工作日历只跳周末。没有和外包系统打通。
-- 不是腾讯的系统，不要写成「参与某游戏项目组」。
+## 🗂️ 目录结构
 
-## 简历条目（数字已用本次实测替换；循环与分组对照必须写明）
+```text
+pipesched/
+├── pipesched/             # 核心包
+│   ├── kitsu_client.py    # 只通过 Gazu 读写
+│   ├── estimate.py        # 同类历史估时
+│   ├── schedule.py        # 关键路径式排期 + 工作日历
+│   ├── risk.py            # 五条字段规则
+│   ├── comments.py · llm.py · hallucination.py
+│   ├── writeback.py       # 确认令牌护栏
+│   └── seed.py            # 合成数据生成器
+├── app/                   # FastAPI 工作台
+├── configs/               # settings + 两套管线模板
+├── data/gold/             # 冻结快照与金标
+├── eval/                  # 评测脚本与结果
+├── scripts/               # 启动 Kitsu、灌数、评测、工作台
+├── tests/                 # pytest
+└── docs/                  # PRD · DEMO · COST
+```
 
-**美术制作排期与进度风险 Agent（PipeSched）**｜个人项目｜2026.11
+## ⚖️ 设计取舍
 
-基于开源制作跟踪平台 Kitsu（https://github.com/cgwire/kitsu ，官方镜像 v1.0.79，Zou API 1.1.2，Python 客户端 Gazu）做旁路扩展，不改动平台内核。两个模拟项目共 313 条任务，数据为固定种子合成。
+| 选择 | 放弃 | 原因 |
+|---|---|---|
+| 同类中位数 + P75 缓冲 | 精确到小时的预测 | 不足 3 条同类就回退模板并标低置信 |
+| 简单关键路径排期 | APS / 多人优化 | 先解决「依据可解释」，再谈最优 |
+| 影子模式 | 自动改状态 | 回顾式 Precision 仍低，误报会消耗信任 |
+| 旁路官方镜像 | 修改 Kitsu 内核 | 避免 AGPL 义务与升级成本 |
 
-- 将任务类型依赖、估时口径、返修与外包 SLA、风险阈值抽象为可切换 YAML 模板，配置手游短管线与角色全流程（原画→建模→贴图→绑定→动画→特效），同一套 Agent 只换配置、不改代码。【待实际访谈后填：访谈 N 位有美术制作或项目管理经验的同学】
-- 排期按模板 DAG 拆解，用同类已完成任务（同任务类型+同资产类型，排除自身）给出中位数 / P75。在 258 条历史任务按完成日 70/30 留出后，测试集 78 条的中位数 MAPE 为 0.35（模板默认基线 0.47；其中角色项目 0.23 vs 0.53，手游项目中位数 0.48 **差于**模板 0.42，须一并讲）。日期、实耗、返修只由 Kitsu API 返回；写回 `start_date` / `due_date` 必须经制片确认，无令牌则拒绝（单元测试与真实 Zou 均验证，未确认写回为 0）。
-- 进度风险采用「规则在前、影子模式」：逾期、超估、高返修、依赖阻塞、评审 SLA，出卡但不自动改状态。进行中注入样本上规则与意图一致（**存在循环，不当预测**）。回顾式在到期前 2 天预测后来是否延期，仅规则 Precision 0.1053、Recall 0.1429（n=99，TP 2 / FP 17 / FN 12 / TN 68），据此不自动改状态。评审备注用 `deepseek-ai/DeepSeek-V3.2` 抽取阻塞原因（temperature 0，引用必须对齐原文，失败回退关键词）：同一套 149 条金标上产品输出 Precision 0.8780、Recall 1.0000、F1 0.9351（关键词基线 0.5217 / 1.0000 / 0.6857）；反话与误导误报从 33 降到 0，剩余 5 条误报均为金标 normal 但语义像进度受阻的句子，未为刷分改金标。幻觉率（脚本定义：引用对不齐原文、无引用称阻塞、编造数字或虚构引语）0.0000。44 次调用、11778 token，按硅基流动官网标价估算 ¥0.049664。规则+LLM 回顾式 Precision 0.2609、Recall 0.4286（优于规则+关键词的 0.2000 / 0.4286），但仍低。召回=1 被合成用词抬高，不能外推。
-- 失败兜底：API 或解析失败回退关键词；无模型时规则扫描仍独立运行（本地 Gazu 拉取并扫描单项目约 99–189 ms，规则本身费用 0）；无同类历史则回退模板默认并标低置信；第一周不做自动改派。坏例见 `eval/badcases.md`。
+## ⚠️ 局限
 
-## 你必须自己做的
+- 数据是合成的，工时分布和延期率由生成器设定，不能外推到真实项目组。
+- 没有真实制片或 TA 访谈，阈值是初始值。
+- 进行中规则 P/R=1 是与生成意图的一致性检查（循环），**不是预测能力**。
+- 本环境无法新建 Kitsu 用户，没有多指派、多技能产能；工作日历只跳周末。
 
-1. 按上面的步骤在自己电脑上跑通 Kitsu、灌数、评测和工作台，并按 `DEMO.md` 走一遍。面试会问实现取舍，请把「代码导读」读完，并打开 `pipesched/kitsu_client.py`、`estimate.py`、`risk.py`、`writeback.py` 看一遍。
-2. 约有美术或项目管理经验的同学做访谈，校准阈值和工序后再填访谈人数。没做访谈就保持占位。
-3. 不要把进行中的 P/R=1.00、关键词 Recall=1.00 说成线上效果；不要把合成数据说成项目组真实数据；不要写成和腾讯合作过。
-4. 在自己电脑上按 README 配 `.env.local`（只放 `SILICONFLOW_API_KEY`），读懂 `pipesched/llm.py`、`comments.py`、`hallucination.py` 和 `eval/results.md` 第 3 节。面试会问 5 条误报、幻觉定义、以及为什么召回=1 不能外推。不要把估算费用说成账单。
+## ❓ FAQ
+
+<details>
+<summary><b>LLM 的 5 条误报是幻觉吗？</b></summary>
+
+不是。它们的金标是 `normal`（如「原画其实还没定」），引用对齐原文，属于「什么算阻塞」的定义分歧。没有为刷分改金标或提示词。
+</details>
+
+<details>
+<summary><b>对接 Zou 时踩过哪些坑？</b></summary>
+
+累计实耗在 `duration`（秒），`task.time_spent` 常为 `null`；评论正文在 `text`；`set_time_spent` 单位是秒；删除项目前必须先 `close_project`。
+</details>
+
+## 📄 许可
+
+- 代码：[MIT](LICENSE)，© 2026 felix6328。
+- Kitsu / Zou 为 AGPL-3.0，本项目旁路使用官方镜像与 API，**未修改内核**；Gazu 为 LGPL-3.0，作为库使用。详见 [NOTICE](NOTICE)。
