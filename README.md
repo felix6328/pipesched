@@ -1,5 +1,7 @@
 # PipeSched｜美术制作排期与进度风险 Agent
 
+> **已由 [ieg-artpipe](https://github.com/felix6328/ieg-artpipe) 取代。** 本仓库是早期版本，保留作过程记录；ArtPipe 改用开源游戏 0 A.D. 的真实资产和开发历史做评测，后续更新都在那边。
+
 个人项目，为投递「腾讯 IEG｜腾讯游戏管理平台产品实习生」而做。  
 **不是**腾讯或任何游戏项目组的生产系统。两个 Kitsu 项目里的资产、工时、评论全部由固定种子脚本合成，README 和数据清单都标了 `synthetic`。
 
